@@ -1,0 +1,6 @@
+Basic data structure:
+
+uid         unique ID for record version
+id          record ID
+updated     last update date
+text        content
