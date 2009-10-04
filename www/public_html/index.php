@@ -7,7 +7,23 @@
 
     // Load all pages
     $pages = array();
-    $query = $db->query('SELECT * FROM data ORDER BY uid DESC');
+    $query = $db->query('
+        SELECT DISTINCT
+            data.*,
+            COUNT(relationship.uid) AS links
+        FROM
+            data
+        LEFT JOIN
+            relationship
+        ON
+            data.uid = relationship."primary"
+        OR  data.uid = relationship."secondary"
+        GROUP BY
+            data.uid
+        ORDER BY
+            COUNT(relationship.uid) DESC,
+            data.uid DESC
+    ');
     while ($page = $query->fetch(SQLITE_ASSOC))
     {
         $pages[] = $page;

@@ -4,3 +4,12 @@ uid         unique ID for record version
 id          record ID
 updated     last update date
 text        content
+
+
+Relationships
+
+uid         unique ID for the relationship
+type        relationship type
+primary     primary data id
+secondary   secondary data id
+added       added date
