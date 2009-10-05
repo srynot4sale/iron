@@ -30,6 +30,7 @@
         die();
     }
 
+
     // Load relationships
     $linkedto = array();
     $query = $db->query(
@@ -60,32 +61,29 @@
     // If commited
     if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
-        // Attempt to insert relationship into database
-        $sql = '
-            INSERT INTO
-                "relationship"
-            (
-                "type",
-                "primary",
-                "secondary"
-            )
-            VALUES
-            (
-                '.(int)$_POST['type'].',
-                '.(int)$page['uid'].',
-                '.(int)$_POST['related'].'
-            )
-        ';
-        $db->queryExec($sql);
+        if (!empty($_POST['text']))
+        {
+            // Insert new
+            $related = iron_add_data($_POST['text']);
+        }
+        elseif (!empty($_POST['related']))
+        {
+            $related = $_POST['related'];
+        }
 
-        header('Location: /'.$page['uid']);
-        die();
+        // If we received the data we needed
+        if (!empty($related))
+        {
+            // Attempt to insert relationship into database
+            iron_add_relationship($page['uid'], $related, $_POST['type']);
+
+            header('Location: /'.$page['uid']);
+            die();
+        }
     }
-    else
-    {
-        // Show page and relationships
-        require '../views/page.php';
-    }
+
+    // Show page and relationships
+    require '../views/page.php';
 
     // Show footer
     require '../footer.tpl.php';

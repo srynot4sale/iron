@@ -35,3 +35,24 @@
 </p>
 
 </form>
+
+<h2>Add new related</h2>
+
+<form method="POST">
+
+<p>
+    Type:
+    <select name="type">
+        <option value="1">Related</option>
+    </select>
+</p>
+
+<p>
+    <textarea name="text" cols="100" rows="10" style="padding: 0.5em;"></textarea>
+</p>
+
+<p>
+    <input type="submit" value="Add new related" /></p>
+</p>
+
+</form>

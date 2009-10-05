@@ -1,5 +1,7 @@
 <?php
-    
+
+    require 'lib.php';
+
     ob_start();
 
     // Connect to the database

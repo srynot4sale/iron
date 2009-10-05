@@ -9,30 +9,14 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
         // Attempt to insert into database
-        $sql = '
-            INSERT INTO
-                data
-            (
-                text
-            )
-            VALUES
-            (
-                \''.sqlite_escape_string($_POST['text']).'\'
-            )
-        ';
-        $db->queryExec($sql);
+        $id = iron_add_data($_POST['text']);
 
-        header('Location: /');
+        header('Location: /'.$id);
         die();
     }
-    else
-    {
-        // Show add form
-        require '../views/add.php';
-    }
+
+    // Show add form
+    require '../views/add.php';
 
     // Show footer
     require '../footer.tpl.php';
-
-?>
-
