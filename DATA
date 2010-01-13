@@ -2,8 +2,9 @@ Basic data structure:
 
 uid         unique ID for record version
 id          record ID
-updated     last update date
 text        content
+updated     last update date
+current     current version flag
 
 
 Relationships
@@ -13,3 +14,19 @@ type        relationship type
 primary     primary data id
 secondary   secondary data id
 added       added date
+
+CREATE TABLE data(
+    uid INTEGER PRIMARY KEY ASC,
+    id INTEGER,
+    text BLOB,
+    updated TEXT,
+    current INTEGER DEFAULT 1
+);
+
+CREATE TABLE "relationship" (
+    uid INTEGER PRIMARY KEY ASC,
+    "type" INTEGER,
+    "primary" INTEGER,
+    "secondary" INTEGER,
+    "added" TEXT
+);
