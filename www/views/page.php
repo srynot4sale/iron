@@ -1,14 +1,18 @@
 <p><?= htmlentities($page['text']) ?></p>
 
+<p>
+    <a href="/edit.php?id=<?= $page['id'] ?>">edit</a>
+</p>
+
 <h2>Linked to</h2>
 
 <?php
     foreach ($linkedto as $relationship) {
 ?>
 <p>
-    <a href="/<?= $relationship['data.uid'] ?>">#</a>
-    <?= $relationship['data.text'] ?>
-    [<a href="/view.php?uid=<?= $page['uid'] ?>&del=<?= $relationship['data.uid'] ?>">X</a>]
+    <a href="/<?= $relationship['id'] ?>">#</a>
+    <?= $relationship['text'] ?>
+    [<a href="/view.php?id=<?= $page['id'] ?>&del=<?= $relationship['uid'] ?>">X</a>]
 </p>
 <?php
     }

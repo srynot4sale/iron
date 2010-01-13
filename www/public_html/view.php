@@ -6,8 +6,11 @@
     require '../header.tpl.php';
 
     // Load page
-    $query = $db->query('SELECT * FROM data WHERE uid = '.(int)$_GET['uid'].' ORDER BY id DESC');
-    $page = $query->fetch(SQLITE_ASSOC);
+    if (!isset($_GET['id'])) {
+        die('No ID supplied');
+    }
+
+    $page = iron_load_data($_GET['id']);
 
     // If actions
     if (!empty($_GET['del'])) {
@@ -17,16 +20,16 @@
                     relationship
                 WHERE
                 (
-                    "primary" = '.(int)$_GET['uid'].'
+                    "primary" = '.(int)$_GET['id'].'
                 AND "secondary" = '.(int)$_GET['del'].'
                 )
                 OR
                 (
-                    "secondary" = '.(int)$_GET['uid'].'
+                    "secondary" = '.(int)$_GET['id'].'
                 AND "primary" = '.(int)$_GET['del'].'
                 )
         ');
-        header('Location: /'.$_GET['uid']);
+        header('Location: /'.$_GET['id']);
         die();
     }
 
@@ -41,19 +44,23 @@
                 data,
                 relationship
             WHERE
+                data.current = 1
+            AND
             (
-                data.uid = relationship."secondary"
-                AND relationship."primary" = '.(int)$_GET['uid'].'
-            )
-            OR
-            (
-                data.uid = relationship."primary"
-                AND relationship."secondary" = '.(int)$_GET['uid'].'
+                (
+                    data.id = relationship."secondary"
+                    AND relationship."primary" = '.(int)$_GET['id'].'
+                )
+                OR
+                (
+                    data.id = relationship."primary"
+                    AND relationship."secondary" = '.(int)$_GET['id'].'
+                )
             )
             ORDER BY
-                data.uid DESC
+                data.id DESC
     ');
-    while ($relationship = $query->fetch(SQLITE_ASSOC)) {
+    while ($relationship = $query->fetchArray(SQLITE_ASSOC)) {
         $linkedto[] = $relationship;
     }
 
@@ -75,9 +82,9 @@
         if (!empty($related))
         {
             // Attempt to insert relationship into database
-            iron_add_relationship($page['uid'], $related, $_POST['type']);
+            iron_add_relationship($page['id'], $related, $_POST['type']);
 
-            header('Location: /'.$page['uid']);
+            header('Location: /'.$page['id']);
             die();
         }
     }

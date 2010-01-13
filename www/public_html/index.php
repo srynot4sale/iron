@@ -16,15 +16,18 @@
         LEFT JOIN
             relationship
         ON
-            data.uid = relationship."primary"
-        OR  data.uid = relationship."secondary"
+            data.id = relationship."primary"
+        OR  data.id = relationship."secondary"
+        WHERE
+            data.current = 1
         GROUP BY
-            data.uid
+            data.id
         ORDER BY
             COUNT(relationship.uid) DESC,
-            data.uid DESC
+            data.id DESC
     ');
-    while ($page = $query->fetch(SQLITE_ASSOC))
+
+    while ($page = $query->fetchArray(SQLITE_ASSOC))
     {
         $pages[] = $page;
     }

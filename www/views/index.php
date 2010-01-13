@@ -7,7 +7,7 @@
 ?>
     <tr>
         <td>
-        <a href="/<?= $page['data.uid'] ?>">#</a> <?= $page['data.text'] ?> <?= str_repeat('.', $page['links']) ?>
+        <a href="/<?= $page['id'] ?>">#</a> <?= $page['text'] ?> <?= str_repeat('.', $page['links']) ?>
         </td>
     </tr>
 
