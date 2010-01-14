@@ -3,4 +3,4 @@ RewriteRule     /([0-9]+)$                                       /view.php?id=$1
 
 php_flag magic_quotes_gpc off
 php_flag display_errors on
-php_value error_reporting E_ALL
+php_value error_reporting 2147483647
