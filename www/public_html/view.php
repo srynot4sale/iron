@@ -14,20 +14,12 @@
 
     // If actions
     if (!empty($_GET['del'])) {
-        $db->queryExec(
+        $db->query(
             '
                 DELETE FROM
                     relationship
                 WHERE
-                (
-                    "primary" = '.(int)$_GET['id'].'
-                AND "secondary" = '.(int)$_GET['del'].'
-                )
-                OR
-                (
-                    "secondary" = '.(int)$_GET['id'].'
-                AND "primary" = '.(int)$_GET['del'].'
-                )
+                    uid = '.(int)$_GET['del'].'
         ');
         header('Location: /'.$_GET['id']);
         die();
@@ -35,33 +27,82 @@
 
 
     // Load relationships
-    $linkedto = array();
+    // Load parents
+    $parents = array();
     $query = $db->query(
         '
             SELECT DISTINCT
-                data.*
+                data.*,
+                r.uid AS rid
             FROM
-                data,
-                relationship
+                data
+            INNER JOIN
+                relationship r
+             ON r."primary" = data.id
             WHERE
                 data.current = 1
+            AND r.type = 2
+            AND r."secondary" = '.(int)$page['id'].'
+            ORDER BY
+                data.id DESC
+    ');
+    while ($parent = $query->fetchArray(SQLITE_ASSOC)) {
+        $parents[] = $parent;
+    }
+
+    // Load children
+    $children = array();
+    $query = $db->query(
+        '
+            SELECT DISTINCT
+                data.*,
+                r.uid AS rid
+            FROM
+                data
+            INNER JOIN
+                relationship r
+             ON r."secondary" = data.id
+            WHERE
+                data.current = 1
+            AND r.type = 2
+            AND r."primary" = '.(int)$page['id'].'
+            ORDER BY
+                data.id DESC
+    ');
+    while ($child = $query->fetchArray(SQLITE_ASSOC)) {
+        $children[] = $child;
+    }
+
+    // Load related
+    $relatedto = array();
+    $query = $db->query(
+        '
+            SELECT DISTINCT
+                data.*,
+                r.uid AS rid
+            FROM
+                data,
+                relationship r
+            WHERE
+                data.current = 1
+            AND r.type = 1
             AND
             (
                 (
-                    data.id = relationship."secondary"
-                    AND relationship."primary" = '.(int)$_GET['id'].'
+                    data.id = r."secondary"
+                    AND r."primary" = '.(int)$_GET['id'].'
                 )
                 OR
                 (
-                    data.id = relationship."primary"
-                    AND relationship."secondary" = '.(int)$_GET['id'].'
+                    data.id = r."primary"
+                    AND r."secondary" = '.(int)$_GET['id'].'
                 )
             )
             ORDER BY
                 data.id DESC
     ');
     while ($relationship = $query->fetchArray(SQLITE_ASSOC)) {
-        $linkedto[] = $relationship;
+        $relatedto[] = $relationship;
     }
 
 
