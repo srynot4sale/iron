@@ -109,21 +109,34 @@
     // If commited
     if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
+        // If text supplied, create new data element
         if (!empty($_POST['text']))
         {
             // Insert new
             $related = iron_add_data($_POST['text']);
         }
+        // Otherwise, use selected
         elseif (!empty($_POST['related']))
         {
             $related = $_POST['related'];
+        }
+
+        $type = $_POST['type'];
+        $current = $page['id'];
+
+        // Handle special cases
+        if ((int)$type === 3) {
+            // Child of
+            $current = $related;
+            $related = $page['id'];
+            $type = 2;
         }
 
         // If we received the data we needed
         if (!empty($related))
         {
             // Attempt to insert relationship into database
-            iron_add_relationship($page['id'], $related, $_POST['type']);
+            iron_add_relationship($current, $related, $type);
 
             header('Location: /'.$page['id']);
             die();

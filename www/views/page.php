@@ -4,10 +4,13 @@
     <a href="/edit.php?id=<?= $page['id'] ?>">edit</a>
 </p>
 
+<?php
+    if (!empty($parents)) {
+?>
 <h2>Parents</h2>
 
 <?php
-    foreach ($parents as $relationship) {
+        foreach ($parents as $relationship) {
 ?>
 <p>
     <a href="/<?= $relationship['id'] ?>">#</a>
@@ -15,13 +18,17 @@
     [<a href="/view.php?id=<?= $page['id'] ?>&del=<?= $relationship['rid'] ?>">x</a>]
 </p>
 <?php
+        }
     }
 ?>
 
+<?php
+    if (!empty($children)) {
+?>
 <h2>Children</h2>
 
 <?php
-    foreach ($children as $relationship) {
+        foreach ($children as $relationship) {
 ?>
 <p>
     <a href="/<?= $relationship['id'] ?>">#</a>
@@ -29,13 +36,17 @@
     [<a href="/view.php?id=<?= $page['id'] ?>&del=<?= $relationship['rid'] ?>">x</a>]
 </p>
 <?php
+        }
     }
 ?>
 
+<?php
+    if (!empty($relatedto)) {
+?>
 <h2>Related</h2>
 
 <?php
-    foreach ($relatedto as $relationship) {
+        foreach ($relatedto as $relationship) {
 ?>
 <p>
     <a href="/<?= $relationship['id'] ?>">#</a>
@@ -43,6 +54,7 @@
     [<a href="/view.php?id=<?= $page['id'] ?>&del=<?= $relationship['rid'] ?>">x</a>]
 </p>
 <?php
+        }
     }
 ?>
 
@@ -55,6 +67,7 @@
     <select name="type">
         <option value="1">Related</option>
         <option value="2">Parent of</option>
+        <option value="3">Child of</option>
     </select>
 </p>
 
@@ -77,6 +90,8 @@
     Type:
     <select name="type">
         <option value="1">Related</option>
+        <option value="2">Parent of</option>
+        <option value="3">Child of</option>
     </select>
 </p>
 
