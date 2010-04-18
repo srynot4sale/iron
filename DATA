@@ -28,5 +28,6 @@ CREATE TABLE "relationship" (
     "type" INTEGER,
     "primary" INTEGER,
     "secondary" INTEGER,
-    "added" TEXT
+    "added" TEXT,
+    "deleted" TEXT
 );
