@@ -4,7 +4,7 @@
 #
 
 import time
-import items
+from data import conn
 
 CHILD_OF = 1
 RELATED_TO = 2
@@ -21,7 +21,7 @@ class relationship():
 
     # Save new
     def save(self):
-        c = items.conn.cursor()
+        c = conn.cursor()
         c.execute(
             """
                 INSERT INTO
@@ -50,5 +50,5 @@ class relationship():
 
         self.uid = c.lastrowid
 
-        items.conn.commit()
+        conn.commit()
         c.close()
