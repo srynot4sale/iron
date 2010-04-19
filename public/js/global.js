@@ -12,6 +12,22 @@ $(function() {
     // Bind dialog to links
     $('a.open-dialog').fancybox(fancybox_config);
 
+    // Add archive functionality
+    $('a.archive').live('click', function(e) {
+
+        e.preventDefault();
+
+        // Show confirm box
+        if (!confirm('Do you want to archive this item?')) {
+            return;
+        }
+
+        // Create form and submit
+        var form = $('<form action="'+$(this).attr('href')+'" method="post"><input type="submit" /></form>');
+        form.appendTo($('body'));
+        form.submit();
+    });
+
     // Expand parent and load children on click
     $('a.parent').live('click', function(e) {
 

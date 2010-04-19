@@ -57,6 +57,16 @@ def new(parent):
     bottle.redirect('/')
 
 
+# Define archive item page
+@bottle.post('/archive/:itemid#[0-9]+#')
+def archive(itemid):
+    item = items.item()
+    item.load(itemid)
+    item.set_archived()
+
+    bottle.redirect('/')
+
+
 bottle.run(
     host = '127.0.0.1',
     port = 8080

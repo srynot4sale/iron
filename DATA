@@ -20,7 +20,8 @@ CREATE TABLE "data"(
     "id" INTEGER,
     "text" BLOB,
     "updated" TEXT,
-    "current" INTEGER DEFAULT 1
+    "current" INTEGER DEFAULT 1,
+    "archive" INTEGER DEFAULT 0
 );
 
 CREATE TABLE "relationship" (

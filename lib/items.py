@@ -56,6 +56,27 @@ class item():
         return loadChildren(self.id)
 
 
+    # Archive this item
+    def set_archived(self):
+        c = conn.cursor()
+        c.execute(
+            """
+                UPDATE
+                    "data"
+                SET
+                    "archive" = 1
+                WHERE
+                    "id" = ?
+            """,
+            (
+                self.id,
+            )
+        )
+
+        conn.commit()
+        c.close()
+
+
     # Save item to database as new item
     def save(self, parent):
         c = conn.cursor()
@@ -130,6 +151,7 @@ def loadChildren(parent):
              ON "relationship"."primary" = "data"."id"
             WHERE
                 "data"."current" = 1
+            AND "data"."archive" = 0
             AND "relationship"."secondary" = ?
             AND "relationship"."type" = ?
         """,
