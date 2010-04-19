@@ -8,7 +8,9 @@
 
 
 % if len(items) == 0:
-<p>No content available</p>
+<p>No items available</p>
 % end
 
+% if homepage == True:
 % rebase template title='Index'
+% end

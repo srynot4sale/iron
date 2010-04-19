@@ -24,18 +24,24 @@ def static_file(filename):
 def index():
     new = items.loadNewest()
 
-    return {'items': new}
+    return {
+        'items': new,
+        'homepage': True
+    }
 
 
 # Define show children page
 @bottle.get('/children/:parent#[0-9]+#')
-@bottle.view('children')
+@bottle.view('index')
 def new(parent):
     parent_item = items.item()
     parent_item.load(parent)
     children = parent_item.get_children()
 
-    return {'parent': parent, 'children': children}
+    return {
+        'items': children,
+        'homepage': False
+    }
 
 
 # Define create new page
