@@ -1,0 +1,31 @@
+body, textarea {
+    color: #3E3E3E;
+    font-family: Verdana, "lucida console", sans-serif;
+    font-size: 12px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+textarea {
+    width: 350px;
+    height: 75px;
+    padding: 5px;
+}
+
+input {
+    display: block;
+}
+
+a {
+    text-decoration: none;
+}
+
+a.parent {
+    color: #3E3E3E;
+}
+
+div.children {
+    margin-left: 20px;
+}
