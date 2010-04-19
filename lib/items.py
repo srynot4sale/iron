@@ -38,6 +38,8 @@ class item():
 
         self.set_data(c.fetchone())
 
+        c.close()
+
         if self.uid < 1:
             raise Exception('item does not exist')
 
