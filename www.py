@@ -12,6 +12,12 @@ from lib import items
 bottle.debug(True)
 
 
+# Static files
+@bottle.get('/static/:filename#.+#')
+def static_file(filename):
+    bottle.send_file(filename, root='/home/aaronb/code/personal/iron/public')
+
+
 # Define homepage
 @bottle.get('/')
 @bottle.view('index')
@@ -19,6 +25,17 @@ def index():
     new = items.loadNewest()
 
     return {'items': new}
+
+
+# Define show children page
+@bottle.get('/children/:parent#[0-9]+#')
+@bottle.view('children')
+def new(parent):
+    parent_item = items.item()
+    parent_item.load(parent)
+    children = parent_item.get_children()
+
+    return {'parent': parent, 'children': children}
 
 
 # Define create new page
@@ -38,23 +55,6 @@ def new(parent):
     item.save(parent)
 
     bottle.redirect('/')
-
-
-# Define show children page
-@bottle.get('/children/:parent#[0-9]+#')
-@bottle.view('children')
-def new(parent):
-    parent_item = items.item()
-    parent_item.load(parent)
-    children = parent_item.get_children()
-
-    return {'parent': parent, 'children': children}
-
-
-# Static files
-@bottle.get('/static/:filename#.+#')
-def static_file(filename):
-    bottle.send_file(filename, root='/home/aaronb/code/personal/iron/public')
 
 
 bottle.run(
