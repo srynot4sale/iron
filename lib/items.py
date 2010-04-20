@@ -9,12 +9,15 @@ from data import conn
 
 class item():
 
-    # Properties
+    # Database mapped properties
     uid = None
     id = None
     text = None
     updated = None
     current = None
+
+    # Meta properties (no corresponding db column)
+    count = None
 
 
     # Load from database
@@ -134,6 +137,8 @@ def loadNewest():
     return loadChildren(0)
 
 
+# Return a list of all children of a parent
+# Parent 0 = the root nodes
 def loadChildren(parent):
     c = conn.cursor()
     c.execute(
@@ -143,22 +148,41 @@ def loadChildren(parent):
                 "data"."id",
                 "data"."text",
                 "data"."updated",
-                "data"."current"
+                "data"."current",
+                "children"."count"
             FROM
                 "data"
             INNER JOIN
                 "relationship"
              ON "relationship"."primary" = "data"."id"
+            LEFT JOIN
+                (
+                    SELECT
+                        "relationship"."secondary" AS "id",
+                        COUNT("relationship"."uid") AS "count"
+                    FROM
+                        "relationship"
+                    INNER JOIN
+                        "data"
+                     ON "data"."id" = "relationship"."primary"
+                    WHERE
+                        "data"."current" = 1
+                    AND "data"."archive" = 0
+                    AND "relationship"."type" = :rel
+                    GROUP BY
+                        "relationship"."secondary"
+                ) AS "children"
+             ON "children"."id" = "data"."id"
             WHERE
                 "data"."current" = 1
             AND "data"."archive" = 0
-            AND "relationship"."secondary" = ?
-            AND "relationship"."type" = ?
+            AND "relationship"."secondary" = :parent
+            AND "relationship"."type" = :rel
         """,
-        (
-            parent,
-            relationships.CHILD_OF,
-        )
+        {
+            'parent': parent,
+            'rel': relationships.CHILD_OF,
+        }
     )
 
     items = []
