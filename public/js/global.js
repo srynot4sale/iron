@@ -18,7 +18,7 @@ $(function() {
 
             matches = content.match(/(http:\/\/[^ ]+)/g);
             for (match in matches) {
-                $(this).after(' <a target="_blank" href="'+matches[match]+'" title="'+matches[match]+'">^</a> ');
+                $(this).after(' <a class="external" target="_blank" href="'+matches[match]+'" title="'+matches[match]+'">^</a> ');
             }
         });
     }

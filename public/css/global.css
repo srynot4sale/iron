@@ -27,8 +27,8 @@ a.parent {
     color: #3E3E3E;
 }
 
-a.parent a {
-    color: #00f;
+a.external {
+    color: #f00;
 }
 
 div.children {
