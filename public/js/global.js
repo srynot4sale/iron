@@ -13,7 +13,7 @@ $(function() {
         });
 
         // Find urls and add links
-        $('a.parent', par).each(function() {
+        $('.parent', par).each(function() {
             var content = $(this).html();
 
             matches = content.match(/(http:\/\/[^ ]+)/g);
