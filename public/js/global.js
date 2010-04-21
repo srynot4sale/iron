@@ -1,16 +1,29 @@
 $(function() {
 
-    var fancybox_config = {
-          ajax: {
-            type: 'GET'
-        }
-        , padding: 20
-        , width: 640
-        , height: 480
-    };
+    function setup_items(par) {
 
-    // Bind dialog to links
-    $('a.open-dialog').fancybox(fancybox_config);
+        // Setup fancyboxes
+        $('a.open-dialog', par).fancybox({
+              ajax: {
+                type: 'GET'
+            }
+            , padding: 20
+            , width: 640
+            , height: 480
+        });
+
+        // Find urls and add links
+        $('a.parent', par).each(function() {
+            var content = $(this).html();
+
+            matches = content.match(/(http:\/\/[^ ]+)/g);
+            for (match in matches) {
+                $(this).after(' <a target="_blank" href="'+matches[match]+'" title="'+matches[match]+'">^</a> ');
+            }
+        });
+    }
+
+    setup_items($('body'));
 
     // Add archive functionality
     $('a.archive').live('click', function(e) {
@@ -50,8 +63,8 @@ $(function() {
             // Append children to parent paragraph
             para.append(children);
 
-            // Bind dialog to links
-            $('a.open-dialog', children).fancybox(fancybox_config);
+            // Bind dialog to links, and setup other stuff
+            setup_items(children);
         });
 
     });

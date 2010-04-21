@@ -20,10 +20,15 @@ input {
 
 a {
     text-decoration: none;
+    color: #00f;
 }
 
 a.parent {
     color: #3E3E3E;
+}
+
+a.parent a {
+    color: #00f;
 }
 
 div.children {
