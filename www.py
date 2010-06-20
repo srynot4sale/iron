@@ -18,6 +18,12 @@ def static_file(filename):
     bottle.send_file(filename, root='/home/aaronb/code/personal/iron/public')
 
 
+# Define favicon.ico
+@bottle.get('/favicon.ico')
+def favicon():
+    return ''
+
+
 # Define homepage
 @bottle.get('/')
 @bottle.view('index')
