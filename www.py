@@ -54,7 +54,10 @@ def new(parent):
 @bottle.get('/new/:parent#[0-9]+#')
 @bottle.view('new')
 def new(parent):
-    return {'parent': parent}
+    parent_item = items.item()
+    parent_item.load(parent)
+
+    return {'parent': parent_item}
 
 
 # Define create new page

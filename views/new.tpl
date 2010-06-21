@@ -1,6 +1,6 @@
-<h2>Create new child of #{{parent}}</h2>
+<h2>Create new child of '{{parent.text}}'</h2>
 
-<form method="POST" action="/new/{{parent}}">
+<form method="POST" action="/new/{{parent.id}}">
 
     <textarea name="text"></textarea>
 
