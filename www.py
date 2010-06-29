@@ -63,11 +63,13 @@ def new(parent):
 # Define create new page
 @bottle.post('/new/:parent#[0-9]+#')
 def new(parent):
-    post = bottle.request.POST
 
     item = items.item()
-    item.set_data(post)
-    item.save(parent)
+    item.set_data(bottle.request.POST)
+
+    # Check text was actually entered
+    if item.validate():
+        item.save(parent)
 
     bottle.redirect('/')
 

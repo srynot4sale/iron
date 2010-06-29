@@ -80,6 +80,14 @@ class item():
         c.close()
 
 
+    # Validate item
+    def validate(self):
+        if len(self.text):
+            return True
+        else:
+            return False
+
+
     # Save item to database as new item
     def save(self, parent):
         c = conn.cursor()
