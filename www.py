@@ -54,8 +54,14 @@ def new(parent):
 @bottle.get('/new/:parent#[0-9]+#')
 @bottle.view('new')
 def new(parent):
-    parent_item = items.item()
-    parent_item.load(parent)
+
+    if parent == '0':
+        parent_item = items.item()
+        parent_item.id = 0
+        parent_item.text = 'Root'
+    else:
+        parent_item = items.item()
+        parent_item.load(parent)
 
     return {'parent': parent_item}
 
