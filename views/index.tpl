@@ -6,7 +6,9 @@
     <span class="parent" title="#{{item.id}}: created {{item.updated}}">{{item.text}}</span>
 % end
     <a class="open-dialog" href="/new/{{item.id}}">+</a>
+% if not item.count:
     <a class="archive" href="/archive/{{item.id}}">a</a>
+% end
 </p>
 % end
 
