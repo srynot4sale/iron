@@ -15,10 +15,9 @@
 
     <body>
 
-        <h1>Iron</h1>
+        <h1><a href="/">Iron</a></h1>
 
         <ul id="navigation">
-            <li><a href="/">Home</a></li>
             <li><a class="open-dialog" href="/new/0">New</a></li>
         </ul>
 
