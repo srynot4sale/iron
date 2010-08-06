@@ -2,6 +2,8 @@
 #
 #
 #
+import os, os.path
+
 
 # Load bottle framework
 from lib import bottle
@@ -11,11 +13,13 @@ from lib import items
 
 bottle.debug(True)
 
+cwd = os.getcwd()
 
 # Static files
 @bottle.get('/static/:filename#.+#')
 def static_file(filename):
-    bottle.send_file(filename, root='/home/aaronb/code/personal/iron/public')
+    path = os.path.join(cwd, 'static')
+    bottle.send_file(filename, root=path)
 
 
 # Define favicon.ico
