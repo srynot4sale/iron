@@ -1,8 +1,19 @@
 
-import sqlite3
+import sqlite3, os.path
 
-# Connect to db
-conn = sqlite3.connect('/home/aaronb/code/personal/iron/data.db')
+
+# Load common file
+from lib import common
+
+# Generate path
+path = os.path.join(common.cwd, 'data.db')
+
+# Check db exists
+if not os.path.isfile(path):
+    raise Exception, 'Could not load data.db %s' % path
+
+# Connect to the db
+conn = sqlite3.connect(path)
 
 def dict_factory(cursor, row):
     d = {}
