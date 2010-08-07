@@ -2,23 +2,24 @@
 #
 #
 #
-import os, os.path
+import os.path
 
 
 # Load bottle framework
 from lib import bottle
+
+# Load iron's common library
+from lib import common
 
 # Load data library
 from lib import items
 
 bottle.debug(True)
 
-cwd = os.getcwd()
-
 # Static files
 @bottle.get('/static/:filename#.+#')
 def static_file(filename):
-    path = os.path.join(cwd, 'static')
+    path = os.path.join(common.cwd, 'static')
     bottle.send_file(filename, root=path)
 
 
