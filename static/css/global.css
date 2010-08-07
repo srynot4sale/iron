@@ -4,18 +4,51 @@ body, textarea {
     font-size: 12px;
 }
 
+
+h1 {
+    float: left;
+    margin-right: 20px;
+}
+
+.navigation {
+    margin: 0;
+    padding: 0;
+}
+
+.navigation li {
+    float: left;
+    margin: 5px 10px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.navigation li a {
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+#footer-navigation {
+    clear: both;
+    margin-top: 20px;
+}
+
 h2 {
     margin-top: 0;
+}
+
+#content {
+    clear: both;
 }
 
 textarea {
     width: 350px;
     height: 75px;
     padding: 5px;
+    display: block;
 }
 
 input {
-    display: block;
+    float: right;
 }
 
 a {

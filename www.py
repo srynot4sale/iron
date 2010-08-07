@@ -29,6 +29,18 @@ def favicon():
     return ''
 
 
+# Define mobile version
+@bottle.get('/mobile=:toggle')
+def mobile(toggle):
+    if toggle == 'on':
+        toggle = True
+    else:
+        toggle = False
+
+    common.togglemobile(toggle)
+    bottle.redirect('/')
+
+
 # Define homepage
 @bottle.get('/')
 @bottle.view('index')
@@ -37,7 +49,8 @@ def index():
 
     return {
         'items': new,
-        'homepage': True
+        'homepage': True,
+        'mobile': common.ismobile()
     }
 
 
@@ -50,8 +63,10 @@ def new(parent):
     children = parent_item.get_children()
 
     return {
+        'parent': parent_item,
         'items': children,
-        'homepage': False
+        'homepage': False,
+        'mobile': common.ismobile()
     }
 
 
@@ -68,7 +83,10 @@ def new(parent):
         parent_item = items.item()
         parent_item.load(parent)
 
-    return {'parent': parent_item}
+    return {
+        'parent': parent_item,
+        'mobile': common.ismobile()
+    }
 
 
 # Define create new page

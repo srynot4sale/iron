@@ -1,0 +1,19 @@
+.navigation li {
+    float: right;
+    margin: 5px 0 0 10px;
+}
+
+input {
+    float: none;
+}
+
+p.item {
+    border: 1px solid #ccc;
+    margin-bottom: 1px;
+    padding: 3px;
+}
+
+p.item a.archive {
+    float: right;
+    margin-left: 10px;
+}
