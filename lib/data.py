@@ -1,6 +1,5 @@
-
+# Database connection and utilies
 import sqlite3, os.path
-
 
 # Load common file
 from lib import common
@@ -15,6 +14,7 @@ if not os.path.isfile(path):
 # Connect to the db
 conn = sqlite3.connect(path)
 
+# Helper function for returning dicts with named columns
 def dict_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
