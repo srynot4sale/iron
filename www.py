@@ -3,7 +3,7 @@
 #
 #
 import os.path
-
+import json
 
 # Load bottle framework
 from lib import bottle
@@ -57,7 +57,7 @@ def index():
 # Define show children page
 @bottle.get('/children/:parent#[0-9]+#')
 @bottle.view('index')
-def new(parent):
+def children(parent):
     parent_item = items.item()
     parent_item.load(parent)
     children = parent_item.get_children()
@@ -111,6 +111,25 @@ def archive(itemid):
     item.set_archived()
 
     bottle.redirect('/')
+
+
+# Define new-style homepage
+@bottle.get('/index2')
+@bottle.view('index2')
+def index2():
+    return {}
+
+
+# Define json format data
+@bottle.get('/json/:parent#[0-9]+#')
+def json(parent):
+    # Load children of parent
+    parent_item = items.item()
+    parent_item.load(parent)
+    children = parent_item.get_children()
+
+    # Return as json formatted string
+    return json.dumps(children)
 
 
 bottle.run(
