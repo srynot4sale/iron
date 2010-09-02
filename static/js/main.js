@@ -1,7 +1,60 @@
 var iron = {
 
+    actions: {
+
+        /**
+         * Display create/edit form for data items
+         *
+         * @param   itemid  Item's id, 0 = new
+         */
+        display_edit_form: function(itemid) {
+
+            // Clear data in form
+            var form = $('div#edit-item');
+            $('textarea', form).html('');
+
+            // Bind submit event
+            $('form', form).one(
+                'submit',
+                iron.actions.submit_edit_form
+            );
+
+            // Bind close event
+            $('#edit-item-close', form).one(
+                'click',
+                iron.actions.hide_edit_form
+            );
+
+            // Display
+            form.show();
+        },
+
+
+        /**
+         * Hide create/edit form for data items
+         */
+        hide_edit_form: function() {
+
+            $('div#edit-item').hide();
+
+        },
+
+
+        /**
+         * Submit create/edit form for data items
+         */
+        submit_edit_form: function() {
+
+            iron.actions.hide_edit_form();
+
+        }
+    },
+
     views: {
 
+        /*
+         * Build and display root branch markup
+         */
         display_root_branch: function() {
 
             // Create a container for the branch data
@@ -10,7 +63,12 @@ var iron = {
             iron.views.display_branch(0);
         },
 
+
+        /*
+         * Build and display a branch's markup
+         */
         display_branch: function(rootid) {
+
             // Get branch data
             var data = iron.data.fetch_branch(rootid);
 
