@@ -3,24 +3,50 @@ var iron = {
     actions: {
 
         /**
+         * Bind links in header navigation
+         */
+        bind_header_links: function() {
+
+            var nav = $('ul#header-navigation');
+
+            // New root node form
+            $('a.open-dialog', nav).bind(
+                'click',
+                function () {
+                    iron.actions.display_edit_form(0, 0);
+                    return false;
+                }
+            );
+
+        },
+
+
+        /**
          * Display create/edit form for data items
          *
          * @param   itemid  Item's id, 0 = new
+         * @param   parentid    Parent's id, 0 = root
          */
-        display_edit_form: function(itemid) {
+        display_edit_form: function(itemid, parentid) {
+
+            // Get form
+            var form = $('div#edit-item');
 
             // Clear data in form
-            var form = $('div#edit-item');
             $('textarea', form).html('');
 
+            // Save ids
+            $('#edit-item-itemid', form).val(itemid);
+            $('#edit-item-parentid', form).val(parentid);
+
             // Bind submit event
-            $('form', form).one(
+            $('form', form).bind(
                 'submit',
                 iron.actions.submit_edit_form
             );
 
             // Bind close event
-            $('#edit-item-close', form).one(
+            $('#edit-item-close', form).bind(
                 'click',
                 iron.actions.hide_edit_form
             );
@@ -81,7 +107,7 @@ var iron = {
                 branch += '</span>';
 
                 if (data[leaf].children) {
-                    branch += ' ('+data[leaf].children+')';
+                    branch += ' <span class="meta">(<span class="children-count">'+data[leaf].children+'</span>)</span>';
                     branch += '<ul id="cont-'+leaf+'" style="display: none;"></ul>';
                 }
 
@@ -116,42 +142,72 @@ var iron = {
 
     data: {
 
+        store: {
+
+            0: {
+                1: {
+                    'text': 'Test 1',
+                    'children': 1
+                },
+                2: {
+                    'text': 'Test 2',
+                    'children': 0
+                }
+            },
+
+            1: {
+                3: {
+                    'text': 'Child of Test 1',
+                    'children': 0
+                }
+            }
+        },
+
+
         fetch_branch: function(rootid) {
+
             // Just test data for now
-            if (rootid == 0) {
-                return {
-                    1: {
-                        'text': 'Test 1',
-                        'children': 1
-                    },
-                    2: {
-                        'text': 'Test 2',
-                        'children': 0
-                    }
-                }
+            if (iron.data.store[rootid] == undefined) {
+                return {};
             }
-            else if (rootid == 1) {
-                return {
-                    3: {
-                        'text': 'Child of Test 1',
-                        'children': 0
-                    }
-                }
-            }
-            else {
-                return {}
-            }
-        }
+
+            return iron.data.store[rootid];
+        },
+
+
+        fetch_node: function(itemid, parentid) {
+
+            return iron.data.store[parentid][itemid];
+        },
+
+
+        update_node: function(itemid, parentid, text, orderid) {
+
+            // Save
+            var node= {
+                'text': text,
+                'children': 0
+            };
+
+            iron.data.store[parentid][itemid] = node;
+
+        },
     }
 }
 
 $(function() {
+
+    /**
+     * Bind header-navigation links
+     */
+    iron.actions.bind_header_links();
+
     /**
      * Things to do on first page load
      *
      * - Build root nodes view
      */
-    iron.views.display_root_branch()
+    iron.views.display_root_branch();
 });
 
 /*
