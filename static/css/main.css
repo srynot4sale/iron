@@ -1,0 +1,69 @@
+body, textarea {
+    color: #3E3E3E;
+    font-family: Verdana, "lucida console", sans-serif;
+    font-size: 12px;
+}
+
+
+h1 {
+    margin-top: 0;
+}
+
+#content {
+    clear: both;
+}
+
+#content ul {
+    margin: 10px 0;
+    padding: 0;
+}
+
+#content ul li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 10px;
+}
+
+#content ul li.has-children > span.text {
+    cursor: pointer;
+}
+
+#content ul li span.after {
+    height: 20px;
+    display: block;
+    width: 75px;
+}
+
+#content ul li span.after span.add {
+    display: block;
+    height: 20px;
+    visibility: hidden;
+    color: #00f;
+    padding: 0 0 0 20px;
+    vertical-align: middle;
+}
+
+#content ul li span.after:hover span.add {
+    visibility: visible;
+    cursor: pointer;
+}
+
+#content form.add-form {
+    padding: 0;
+    margin-left: -4px;
+    margin: 0;
+}
+
+#content input {
+    font-size: 12px;
+    padding: 2px;
+}
+
+a {
+    text-decoration: none;
+    color: #00f;
+}
+
+a.external {
+    color: #f00;
+}
