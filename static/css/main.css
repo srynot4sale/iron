@@ -1,9 +1,8 @@
-body, textarea {
+body, input {
     color: #3E3E3E;
-    font-family: Verdana, "lucida console", sans-serif;
-    font-size: 12px;
+    font-family: Calibri, Verdana, "lucida console", sans-serif;
+    font-size: 14px;
 }
-
 
 h1 {
     margin-top: 0;
@@ -55,7 +54,6 @@ h1 {
 }
 
 #content input {
-    font-size: 12px;
     padding: 2px;
 }
 
