@@ -21,7 +21,7 @@ iron.views = {
         for (leaf in data) {
             var class = '';
 
-            if (data[leaf].children) {
+            if (data[leaf].children_count) {
                 class = class + ' has-children';
             }
 
@@ -30,8 +30,8 @@ iron.views = {
             branch += data[leaf].text;
             branch += '</span>';
 
-            if (data[leaf].children) {
-                branch += ' <span class="meta">(<span class="children-count">'+data[leaf].children+'</span>)</span>';
+            if (data[leaf].children_count) {
+                branch += ' <span class="meta">(<span class="children-count">'+data[leaf].children_count+'</span>)</span>';
                 branch += '<ul id="cont-'+leaf+'" style="display: none;"></ul>';
             }
 

@@ -5,33 +5,66 @@ var iron = {
         store: {
 
             0: {
-                1: {
-                    'text': 'Test 1',
-                    'children': 1
-                },
-                2: {
-                    'text': 'Test 2',
-                    'children': 0
-                }
+                text: 'Root node',
+                children_count: 2,
+                children: [1,2]
             },
 
             1: {
-                3: {
-                    'text': 'Child of Test 1',
-                    'children': 0
-                }
+                text: 'Test 1',
+                children_count: 2,
+                children: [3,4]
+            },
+
+            2: {
+                text: 'Test 2',
+                children_count: 0
+            },
+
+            3: {
+                text: 'Child of Test 1',
+                children_count: 0
+            },
+
+            4: {
+                text: 'Awesome',
+                children_count: 1,
+                children: [5]
+            },
+
+            5: {
+                text: 'Lols',
+                children_count: 0
             }
         },
 
 
+        /**
+         * Load data from cache or the server
+         *
+         * Just test data for now tho
+         *
+         * @param rootid Root ID
+         * @return object
+         */
         fetch_branch: function(rootid) {
 
-            // Just test data for now
-            if (iron.data.store[rootid] == undefined) {
-                return {};
+            var root = iron.data.store[rootid];
+
+            // If root does not exist, or has no children
+            if (root == undefined || root.children_count < 1) {
+                return {}
             }
 
-            return iron.data.store[rootid];
+            var children = {};
+
+            // Load children
+            for (i in root.children) {
+                var id = root.children[i];
+                children[id] = iron.data.store[id];
+            }
+
+            return children;
         },
 
 
