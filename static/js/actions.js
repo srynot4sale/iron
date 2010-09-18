@@ -43,6 +43,12 @@ iron.actions = {
         // Get previous id
         var previd = parent.attr('item-id');
 
+        // Update the node
+        iron.data.add_node(
+            previd,
+            value
+        );
+
         iron.views.hide_add_form(parent);
     }
 };
