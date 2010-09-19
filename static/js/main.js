@@ -65,7 +65,7 @@ var iron = {
 
             // If root does not exist, or has no children
             if (root == undefined || root.children_count < 1) {
-                return {}
+                return [];
             }
 
             var ordered = [];
@@ -84,13 +84,7 @@ var iron = {
         },
 
 
-        fetch_node: function(itemid, parentid) {
-
-            return iron.data.store[parentid][itemid];
-        },
-
-
-        update_node: function(itemid, parentid, text, orderid) {
+        update_node: function(itemid, parentid, text, order) {
 
             // Check to see if already exists
             var item = iron.data.store[itemid];
@@ -107,6 +101,28 @@ var iron = {
             // Update
             item.text = text;
             item.parent_id = parentid;
+
+            // Get order and update sibling's orders
+            // See if order already taken
+            var siblings = iron.data.fetch_branch(parentid);
+            var taken = 0;
+            for (sorder in siblings) {
+                if (sorder == order) {
+                    taken = siblings[sorder].id;
+                    break;
+                }
+            }
+
+            // Re order other siblings
+            if (taken) {
+                for (sorder in siblings) {
+                    if (siblings[sorder].order >= order) {
+                        siblings[sorder].order += 1;
+                    }
+                }
+            }
+
+            item.order = order;
 
             // Save
             iron.data.store[itemid] = item;
@@ -128,8 +144,6 @@ var iron = {
                 parent.children.push(itemid);
                 parent.children_count = parent.children_count + 1;
             }
-
-            // Get order and update sibling's orders
         },
 
 
@@ -152,7 +166,30 @@ var iron = {
 
             nextid = parseInt(nextid) + 1;
 
-            iron.data.update_node(nextid, parentid, text);
+            // Get order
+            if (previd) {
+                // Get the item this will be previous too
+                var prev = iron.data.store[previd];
+                var order = prev.order;
+            }
+            else {
+                // Get the next order not already taken
+                var siblings = iron.data.fetch_branch(parentid);
+
+                // Check actually has siblings
+                var order = 0;
+                if (siblings.length) {
+                    for (sorder in siblings) {
+                        if (sorder > order) {
+                            order = sorder;
+                        }
+                    }
+
+                    order = parseInt(order) + 1;
+                }
+            }
+
+            iron.data.update_node(nextid, parentid, text, order);
         },
     }
 }
