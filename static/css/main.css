@@ -13,7 +13,7 @@ h1 {
 }
 
 #content ul {
-    margin: 10px 0;
+    margin: 5px 0 10px;
     padding: 0;
 }
 
@@ -23,27 +23,28 @@ h1 {
     padding: 0 10px;
 }
 
-#content ul li.has-children > span.text {
+#content ul li.has-children > div.item span.text {
     cursor: pointer;
 }
 
 #content ul li span.after {
-    height: 20px;
-    display: block;
-    width: 75px;
+    padding-left: 10px;
+    visibility: hidden;
 }
 
 #content ul li span.after span.add {
-    display: block;
-    height: 20px;
-    visibility: hidden;
     color: #00f;
-    padding: 0 0 0 20px;
-    vertical-align: middle;
+    padding-right: 5px;
+    cursor: pointer;
 }
 
-#content ul li span.after:hover span.add {
+#content ul li div.item:hover span.after span.add {
     visibility: visible;
+}
+
+#content ul li.action span.add {
+    font-style: italic;
+    color: #00f;
     cursor: pointer;
 }
 

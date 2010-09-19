@@ -120,17 +120,14 @@ var iron = {
         },
 
 
-        add_node: function(previd, text) {
+        add_node: function(parentid, previd, text) {
 
-            // Get previous node
-            var prev = iron.data.store[previd];
+            // Get parent node
+            var parent = iron.data.store[parentid];
 
-            if (prev == undefined) {
+            if (parent == undefined) {
                 return;
             }
-
-            // Get parent id
-            var parentid = prev.parent_id;
 
             // Get next id
             var nextid = 0;

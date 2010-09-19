@@ -33,7 +33,7 @@ iron.actions = {
     /**
      * Submit add form for data items
      */
-    submit_add_form: function(form) {
+    submit_add_form: function(form, type, refid) {
 
         var parent = $(form).closest('li');
 
@@ -41,10 +41,19 @@ iron.actions = {
         var value = $('input', form).val();
 
         // Get previous id
-        var previd = parent.attr('item-id');
+        if (type == 'before') {
+            var previd = refid;
+        }
+        else {
+            var previd = 0;
+        }
+
+        // Get parentid
+        var parentid = parent.parent().attr('branch-id');
 
         // Update the node
         iron.data.add_node(
+            parentid,
             previd,
             value
         );

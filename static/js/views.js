@@ -6,7 +6,7 @@ iron.views = {
     setup_root_branch: function() {
 
         // Create a container for the branch data
-        var root_container = $('<ul id="cont-0"></ul>');
+        var root_container = $('<ul id="cont-0" branch-id="0"></ul>');
         $('div#content').append(root_container);
     },
 
@@ -21,23 +21,39 @@ iron.views = {
         for (leaf in data) {
             var class = '';
 
+            var has_children = false;
             if (data[leaf].children_count) {
-                class = class + ' has-children';
+                has_children = true;
+            }
+
+            if (has_children) {
+                class += ' has-children';
             }
 
             branch += '<li item-id="'+leaf+'" class="'+class+'">';
+            branch += '<div class="item">';
             branch += '<span class="text">';
             branch += data[leaf].text;
             branch += '</span>';
 
-            if (data[leaf].children_count) {
+            if (has_children) {
                 branch += ' <span class="meta">(<span class="children-count">'+data[leaf].children_count+'</span>)</span>';
-                branch += '<ul id="cont-'+leaf+'" style="display: none;"></ul>';
             }
 
-            branch += '<span class="after"><span class="add">+</span></span>';
+            branch += '<span class="after"><span class="add" title="Add before">+</span></span>';
+            branch += '</div>';
+
+            if (has_children) {
+                branch += '<ul id="cont-'+leaf+'" branch-id="'+leaf+'" style="display: none;"></ul>';
+            }
+
             branch += '</li>';
         }
+
+        // Add new node
+        branch += '<li class="action">';
+        branch += '<span class="add">Add new</span>';
+        branch += '</li>';
 
         // Hide container
         var container = $('ul#cont-'+rootid);
@@ -48,8 +64,8 @@ iron.views = {
 
         // Add event handlers
         // Toggle children
-        $('li > span.text', container).click(function() {
-            var parentel = $(this).parent();
+        $('li > div.item span.text', container).click(function() {
+            var parentel = $(this).closest('li');
             var children = $('ul', parentel);
 
             // Toggle children view
@@ -61,10 +77,15 @@ iron.views = {
             }
         });
 
-        // Show add form
-        $('li > span.after span.add', container).click(function() {
+        // Show add before form
+        $('li > div.item span.after span.add', container).click(function() {
             var parentel = $(this).closest('li');
+            iron.actions.display_add_form(parentel);
+        });
 
+        // Show add new form
+        $('li.action span.add', container).click(function() {
+            var parentel = $(this).closest('li');
             iron.actions.display_add_form(parentel);
         });
 
@@ -75,35 +96,52 @@ iron.views = {
 
     display_add_form: function(parent) {
 
-        // Hide add link
-        $(' > span.after', parent).hide();
+        // Check if this is an add new
+        if (parent.hasClass('action')) {
+            var type = 'new';
+            var refid = parent.parent().attr('branch-id');
+        }
+        else {
+            var type = 'before';
+            var refid = parent.attr('item-id');
+        }
 
         // Create form markup
         var input = $('<input type="text" />');
         var form = $('<form class="add-form"></form>');
+        var container = $('<li class="add-'+type+'"></li>');
         form.append(input);
+        container.append(form);
 
         // Add event handlers
         // Hide form on blur
         input.blur(function() {
-            iron.views.hide_add_form(parent);
+            iron.views.hide_add_form(container);
         });
 
         // Submit form on enter
         form.submit(function(event) {
             event.stopImmediatePropagation();
-            iron.actions.submit_add_form(this);
+            iron.actions.submit_add_form(this, type, refid);
             return false;
         });
 
+        // Hide stuff
+        if (type == 'new') {
+            parent.hide();
+        }
+
         // Show form
-        parent.append(form);
+        parent.before(container);
         input.focus();
     },
 
 
-    hide_add_form: function(parent) {
-        $('form.add-form', parent).remove();
-        $(' > span.after', parent).show();
+    hide_add_form: function(container) {
+        if (container.hasClass('add-new')) {
+            $('> li.action', container.parent()).show();
+        }
+
+        container.remove();
     }
 }
