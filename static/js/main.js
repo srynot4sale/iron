@@ -89,7 +89,11 @@ var iron = {
             // Check to see if already exists
             var item = iron.data.store[itemid];
 
+            // Flag to say whether new or not
+            var exists = true;
+
             if (item == undefined) {
+                exists = false;
                 item = {
                     text: '',
                     children_count: 0,
@@ -99,30 +103,47 @@ var iron = {
             }
 
             // Update
-            item.text = text;
-            item.parent_id = parentid;
-
-            // Get order and update sibling's orders
-            // See if order already taken
-            var siblings = iron.data.fetch_branch(parentid);
-            var taken = 0;
-            for (sorder in siblings) {
-                if (sorder == order) {
-                    taken = siblings[sorder].id;
-                    break;
-                }
+            if (text != undefined) {
+                item.text = text;
             }
 
-            // Re order other siblings
-            if (taken) {
+            if (parentid != undefined) {
+                item.parent_id = parentid;
+            }
+
+            if (order != undefined) {
+                // Get order and update sibling's orders
+                // See if order already taken
+                var siblings = iron.data.fetch_branch(parentid);
+                var taken = 0;
                 for (sorder in siblings) {
-                    if (siblings[sorder].order >= order) {
-                        siblings[sorder].order += 1;
+                    if (sorder == order) {
+                        taken = siblings[sorder].id;
+                        break;
                     }
                 }
-            }
 
-            item.order = order;
+                // Re order other siblings
+                if (taken) {
+                    if (exists) {
+                        for (sorder in siblings) {
+                            if (siblings[sorder].order == order) {
+                                siblings[sorder].order = item.order;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        for (sorder in siblings) {
+                            if (siblings[sorder].order >= order) {
+                                siblings[sorder].order += 1;
+                            }
+                        }
+                    }
+                }
+
+                item.order = order;
+            }
 
             // Save
             iron.data.store[itemid] = item;

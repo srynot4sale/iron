@@ -67,32 +67,53 @@ iron.views = {
             node = data[i];
 
             // Check if already exists
-            if ($('> li[item-id='+node.id+']', container).length) {
-                last = node.id;
-                continue;
+            var exists = $('> li[item-id='+node.id+']', container);
+
+            // If doesn't already exist, create
+            if (exists.length == 0) {
+
+                var branch = '';
+
+                var has_children = false;
+                if (node.children_count) {
+                    has_children = true;
+                }
+
+                branch += '<li class="item" item-id="'+node.id+'" order-id="'+node.order+'">';
+                branch += '<div class="item">';
+                branch += '<span class="text">';
+                branch += node.text;
+                branch += '</span>';
+
+                style = has_children ? '' : 'style="display: none;"';
+                branch += ' <span class="meta" '+style+'>(<span class="children-count">'+node.children_count+'</span>)</span>';
+
+                branch += '<span class="after">';
+                branch += '<span class="add" title="Add before">+</span>';
+                branch += '<span class="up" title="Move up">&uarr;</span>';
+                branch += '<span class="down" title="Move down">&darr;</span>';
+                branch += '</span>';
+                branch += '</div>';
+                branch += '<ul id="cont-'+node.id+'" branch-id="'+node.id+'" style="display: none;"></ul>';
+
+                branch += '</li>';
             }
+            // If it does already exist
+            else {
+                // Check if order hasn't changed
+                if (parseInt(exists.attr('order-id')) == node.order) {
+                    last = node.id;
+                    continue;
+                }
+                // Remove ready to be moved to correct position
+                else {
+                    exists.remove();
+                    branch = exists;
 
-            var branch = '';
-
-            var has_children = false;
-            if (node.children_count) {
-                has_children = true;
+                    // Update order-id attr
+                    branch.attr('order-id', node.order);
+                }
             }
-
-            branch += '<li class="item" item-id="'+node.id+'">';
-            branch += '<div class="item">';
-            branch += '<span class="text">';
-            branch += node.text;
-            branch += '</span>';
-
-            style = has_children ? '' : 'style="display: none;"';
-            branch += ' <span class="meta" '+style+'>(<span class="children-count">'+node.children_count+'</span>)</span>';
-
-            branch += '<span class="after"><span class="add" title="Add before">+</span></span>';
-            branch += '</div>';
-            branch += '<ul id="cont-'+node.id+'" branch-id="'+node.id+'" style="display: none;"></ul>';
-
-            branch += '</li>';
 
             // Insert after the last item
             if (last) {
@@ -102,6 +123,12 @@ iron.views = {
             else {
                 container.prepend(branch);
             }
+
+            // If it already existed, don't bother adding event handlers
+/*            if (exists.length) {
+                last = node.id;
+                continue;
+            }*/
 
             // Add event handlers
             // Toggle children
@@ -122,6 +149,18 @@ iron.views = {
             $('> li[item-id='+node.id+'] > div.item span.after span.add', container).click(function() {
                 var parentel = $(this).closest('li');
                 iron.actions.display_add_form(parentel);
+            });
+
+            // Move up
+            $('> li[item-id='+node.id+'] > div.item span.after span.up', container).click(function() {
+                var parentel = $(this).closest('li');
+                iron.actions.move_node('up', parentel);
+            });
+
+            // Move down
+            $('> li[item-id='+node.id+'] > div.item span.after span.down', container).click(function() {
+                var parentel = $(this).closest('li');
+                iron.actions.move_node('down', parentel);
             });
 
             // Update last

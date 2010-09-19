@@ -63,4 +63,44 @@ iron.actions = {
         // Rerender the branch
         iron.actions.display_branch(parentid);
     },
+
+
+    move_node: function(where, parent) {
+
+        var node = iron.data.store[parent.attr('item-id')];
+
+        if (node == undefined) {
+            return;
+        }
+
+        // Up
+        if (where == 'up') {
+            // Check if already at top
+            if (node.order == 0) {
+                return;
+            }
+
+            iron.data.update_node(node.id, node.parent_id, undefined, node.order - 1);
+
+            // Rerender the branch
+            iron.actions.display_branch(node.parent_id);
+            return;
+        }
+
+        if (where == 'down') {
+            // Check if not already at bottom
+            var siblings = iron.data.fetch_branch(node.parent_id);
+
+            for (sorder in siblings) {
+                if (sorder > node.order) {
+                    iron.data.update_node(node.id, node.parent_id, undefined, node.order + 1);
+
+                    // Rerender the branch
+                    iron.actions.display_branch(node.parent_id);
+                    return;
+                }
+            }
+        }
+
+    },
 };
