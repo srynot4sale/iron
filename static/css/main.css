@@ -28,13 +28,13 @@ h1 {
 }
 
 #content ul li span.after {
-    padding-left: 10px;
+    padding-left: 5px;
     visibility: hidden;
 }
 
 #content ul li span.after span.add {
     color: #00f;
-    padding-right: 5px;
+    padding: 0 5px;
     cursor: pointer;
 }
 

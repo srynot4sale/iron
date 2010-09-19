@@ -16,39 +16,26 @@ iron.views = {
      */
     display_branch: function(rootid, data) {
 
-        // Render branch data
-        var branch = '';
+        // Get container
+        var container = $('ul#cont-'+rootid);
+
+        // Get count
+        var count = $('> div.item span.meta span.children-count', container.parent());
+
+        // Get number of items in data
+        var length = 0;
         for (leaf in data) {
-            var class = '';
-
-            var has_children = false;
-            if (data[leaf].children_count) {
-                has_children = true;
-            }
-
-            if (has_children) {
-                class += ' has-children';
-            }
-
-            branch += '<li item-id="'+leaf+'" class="'+class+'">';
-            branch += '<div class="item">';
-            branch += '<span class="text">';
-            branch += data[leaf].text;
-            branch += '</span>';
-
-            if (has_children) {
-                branch += ' <span class="meta">(<span class="children-count">'+data[leaf].children_count+'</span>)</span>';
-            }
-
-            branch += '<span class="after"><span class="add" title="Add before">+</span></span>';
-            branch += '</div>';
-
-            if (has_children) {
-                branch += '<ul id="cont-'+leaf+'" branch-id="'+leaf+'" style="display: none;"></ul>';
-            }
-
-            branch += '</li>';
+            length += 1;
         }
+
+        // Compare with old count
+        if (length != parseInt(count.html())) {
+            // Update old count
+            count.html(length);
+        }
+
+        // Render branch data
+        branch = iron.views.render_nodes(data);
 
         // Add new node
         branch += '<li class="action">';
@@ -56,7 +43,6 @@ iron.views = {
         branch += '</li>';
 
         // Hide container
-        var container = $('ul#cont-'+rootid);
         container.hide();
 
         // Locate markup
@@ -91,6 +77,46 @@ iron.views = {
 
         // Show container
         container.show();
+    },
+
+
+    render_nodes: function(data) {
+
+        // Create new nodes
+        var branch = '';
+        for (leaf in data) {
+            var class = '';
+
+            var has_children = false;
+            if (data[leaf].children_count) {
+                has_children = true;
+            }
+
+            if (has_children) {
+                class += ' has-children';
+            }
+
+            branch += '<li item-id="'+leaf+'" class="'+class+'">';
+            branch += '<div class="item">';
+            branch += '<span class="text">';
+            branch += data[leaf].text;
+            branch += '</span>';
+
+            if (has_children) {
+                branch += ' <span class="meta">(<span class="children-count">'+data[leaf].children_count+'</span>)</span>';
+            }
+
+            branch += '<span class="after"><span class="add" title="Add before">+</span></span>';
+            branch += '</div>';
+
+            if (has_children) {
+                branch += '<ul id="cont-'+leaf+'" branch-id="'+leaf+'" style="display: none;"></ul>';
+            }
+
+            branch += '</li>';
+        }
+
+        return branch;
     },
 
 

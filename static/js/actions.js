@@ -59,5 +59,8 @@ iron.actions = {
         );
 
         iron.views.hide_add_form(parent);
-    }
+
+        // Rerender the branch
+        iron.actions.display_branch(parentid);
+    },
 };
