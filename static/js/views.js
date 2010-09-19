@@ -96,7 +96,6 @@ iron.views = {
 
             // Insert after the last item
             if (last) {
-                alert(last);
                 $('> li[item-id='+last+']', container).after(branch);
             }
             // Other wise put it before the action element
