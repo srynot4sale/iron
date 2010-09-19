@@ -34,58 +34,40 @@ iron.views = {
             count.html(length);
         }
 
-        // Render branch data
-        branch = iron.views.render_nodes(data);
-
         // Add new node
-        branch += '<li class="action">';
-        branch += '<span class="add">Add new</span>';
-        branch += '</li>';
+        if ($('> li.action', container).length < 1) {
+            add  = '<li class="action">';
+            add += '<span class="add">Add new</span>';
+            add += '</li>';
 
-        // Hide container
-        container.hide();
+            container.append(add);
 
-        // Locate markup
-        container.html(branch);
+            // Add event handler
+            $('> li.action span.add', container).click(function() {
+                var parentel = $(this).closest('li');
+                iron.actions.display_add_form(parentel);
+            });
+        }
 
-        // Add event handlers
-        // Toggle children
-        $('li > div.item span.text', container).click(function() {
-            var parentel = $(this).closest('li');
-            var children = $('ul', parentel);
-
-            // Toggle children view
-            if (children.is(':visible')) {
-                children.hide();
-            }
-            else {
-                iron.actions.display_branch(parentel.attr('item-id'));
-            }
-        });
-
-        // Show add before form
-        $('li > div.item span.after span.add', container).click(function() {
-            var parentel = $(this).closest('li');
-            iron.actions.display_add_form(parentel);
-        });
-
-        // Show add new form
-        $('li.action span.add', container).click(function() {
-            var parentel = $(this).closest('li');
-            iron.actions.display_add_form(parentel);
-        });
+        // Render branch data
+        iron.views.display_nodes(container, data);
 
         // Show container
         container.show();
     },
 
 
-    render_nodes: function(data) {
+    display_nodes: function(container, data) {
 
         // Create new nodes
-        var branch = '';
         for (leaf in data) {
+            // Check if already exists
+            if ($('li[item-id='+leaf+']', container).length) {
+                continue;
+            }
+
             var class = '';
+            var branch = '';
 
             var has_children = false;
             if (data[leaf].children_count) {
@@ -114,6 +96,29 @@ iron.views = {
             }
 
             branch += '</li>';
+
+            $('> li.action', container).before(branch);
+
+            // Add event handlers
+            // Toggle children
+            $('> li[item-id='+leaf+'] > div.item span.text', container).click(function() {
+                var parentel = $(this).closest('li');
+                var children = $('> ul', parentel);
+
+                // Toggle children view
+                if (children.is(':visible')) {
+                    children.hide();
+                }
+                else {
+                    iron.actions.display_branch(parentel.attr('item-id'));
+                }
+            });
+
+            // Show add before form
+            $('> li[item-id='+leaf+'] > div.item span.after span.add', container).click(function() {
+                var parentel = $(this).closest('li');
+                iron.actions.display_add_form(parentel);
+            });
         }
 
         return branch;
