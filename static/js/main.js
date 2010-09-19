@@ -8,39 +8,45 @@ var iron = {
                 text: 'Root node',
                 children_count: 2,
                 children: [1,2],
-                parent_id: false
+                parent_id: false,
+                order: 0
             },
 
             1: {
                 text: 'Test 1',
                 children_count: 2,
                 children: [3,4],
-                parent_id: 0
+                parent_id: 0,
+                order: 0
             },
 
             2: {
                 text: 'Test 2',
                 children_count: 0,
-                parent_id: 0
+                parent_id: 0,
+                order: 1
             },
 
             3: {
                 text: 'Child of Test 1',
                 children_count: 0,
-                parent_id: 1
+                parent_id: 1,
+                order: 0
             },
 
             4: {
                 text: 'Awesome',
                 children_count: 1,
                 children: [5],
-                parent_id: 1
+                parent_id: 1,
+                order: 1
             },
 
             5: {
                 text: 'Lols',
                 children_count: 0,
-                parent_id: 4
+                parent_id: 4,
+                order: 0
             }
         },
 
@@ -51,7 +57,7 @@ var iron = {
          * Just test data for now tho
          *
          * @param rootid Root ID
-         * @return object
+         * @return array
          */
         fetch_branch: function(rootid) {
 
@@ -62,15 +68,19 @@ var iron = {
                 return {}
             }
 
-            var children = {};
+            var ordered = [];
 
             // Load children
             for (i in root.children) {
                 var id = root.children[i];
-                children[id] = iron.data.store[id];
+                item = iron.data.store[id];
+                item.id = id;
+
+                ordered[item.order] = item;
             }
 
-            return children;
+            // Return as ordered array
+            return ordered;
         },
 
 
@@ -89,7 +99,8 @@ var iron = {
                 item = {
                     text: '',
                     children_count: 0,
-                    parent_id: false
+                    parent_id: false,
+                    order: 0
                 };
             }
 
@@ -100,7 +111,7 @@ var iron = {
             // Save
             iron.data.store[itemid] = item;
 
-            // Update parent if neccesary
+            // Get parent
             var parent = iron.data.store[parentid];
 
             if (parent == undefined) {
@@ -117,6 +128,8 @@ var iron = {
                 parent.children.push(itemid);
                 parent.children_count = parent.children_count + 1;
             }
+
+            // Get order and update sibling's orders
         },
 
 

@@ -23,10 +23,7 @@ iron.views = {
         var count = $('> div.item span.meta span.children-count', container.parent());
 
         // Get number of items in data
-        var length = 0;
-        for (leaf in data) {
-            length += 1;
-        }
+        var length = data.length;
 
         // Compare with old count
         if (length != parseInt(count.html())) {
@@ -63,31 +60,35 @@ iron.views = {
     display_nodes: function(container, data) {
 
         // Create new nodes
-        for (leaf in data) {
+        for (i in data) {
+
+            // Get node
+            node = data[i];
+
             // Check if already exists
-            if ($('li[item-id='+leaf+']', container).length) {
+            if ($('li[item-id='+node.id+']', container).length) {
                 continue;
             }
 
             var branch = '';
 
             var has_children = false;
-            if (data[leaf].children_count) {
+            if (node.children_count) {
                 has_children = true;
             }
 
-            branch += '<li class="item" item-id="'+leaf+'">';
+            branch += '<li class="item" item-id="'+node.id+'">';
             branch += '<div class="item">';
             branch += '<span class="text">';
-            branch += data[leaf].text;
+            branch += node.text;
             branch += '</span>';
 
             style = has_children ? '' : 'style="display: none;"';
-            branch += ' <span class="meta" '+style+'>(<span class="children-count">'+data[leaf].children_count+'</span>)</span>';
+            branch += ' <span class="meta" '+style+'>(<span class="children-count">'+node.children_count+'</span>)</span>';
 
             branch += '<span class="after"><span class="add" title="Add before">+</span></span>';
             branch += '</div>';
-            branch += '<ul id="cont-'+leaf+'" branch-id="'+leaf+'" style="display: none;"></ul>';
+            branch += '<ul id="cont-'+node.id+'" branch-id="'+node.id+'" style="display: none;"></ul>';
 
             branch += '</li>';
 
@@ -95,7 +96,7 @@ iron.views = {
 
             // Add event handlers
             // Toggle children
-            $('> li[item-id='+leaf+'] > div.item span.text', container).click(function() {
+            $('> li[item-id='+node.id+'] > div.item span.text', container).click(function() {
                 var parentel = $(this).closest('li');
                 var children = $('> ul', parentel);
 
@@ -109,7 +110,7 @@ iron.views = {
             });
 
             // Show add before form
-            $('> li[item-id='+leaf+'] > div.item span.after span.add', container).click(function() {
+            $('> li[item-id='+node.id+'] > div.item span.after span.add', container).click(function() {
                 var parentel = $(this).closest('li');
                 iron.actions.display_add_form(parentel);
             });
