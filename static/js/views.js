@@ -124,12 +124,6 @@ iron.views = {
                 container.prepend(branch);
             }
 
-            // If it already existed, don't bother adding event handlers
-/*            if (exists.length) {
-                last = node.id;
-                continue;
-            }*/
-
             // Add event handlers
             // Toggle children
             $('> li[item-id='+node.id+'] > div.item span.text', container).click(function() {
