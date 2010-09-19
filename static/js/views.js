@@ -32,6 +32,9 @@ iron.views = {
         if (length != parseInt(count.html())) {
             // Update old count
             count.html(length);
+
+            // Make sure it's visible
+            count.closest('span.meta').show();
         }
 
         // Add new node
@@ -66,7 +69,6 @@ iron.views = {
                 continue;
             }
 
-            var class = '';
             var branch = '';
 
             var has_children = false;
@@ -74,26 +76,18 @@ iron.views = {
                 has_children = true;
             }
 
-            if (has_children) {
-                class += ' has-children';
-            }
-
-            branch += '<li item-id="'+leaf+'" class="'+class+'">';
+            branch += '<li class="item" item-id="'+leaf+'">';
             branch += '<div class="item">';
             branch += '<span class="text">';
             branch += data[leaf].text;
             branch += '</span>';
 
-            if (has_children) {
-                branch += ' <span class="meta">(<span class="children-count">'+data[leaf].children_count+'</span>)</span>';
-            }
+            style = has_children ? '' : 'style="display: none;"';
+            branch += ' <span class="meta" '+style+'>(<span class="children-count">'+data[leaf].children_count+'</span>)</span>';
 
             branch += '<span class="after"><span class="add" title="Add before">+</span></span>';
             branch += '</div>';
-
-            if (has_children) {
-                branch += '<ul id="cont-'+leaf+'" branch-id="'+leaf+'" style="display: none;"></ul>';
-            }
+            branch += '<ul id="cont-'+leaf+'" branch-id="'+leaf+'" style="display: none;"></ul>';
 
             branch += '</li>';
 

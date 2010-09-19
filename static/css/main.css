@@ -23,7 +23,7 @@ h1 {
     padding: 0 10px;
 }
 
-#content ul li.has-children > div.item span.text {
+#content ul li.item > div.item span.text {
     cursor: pointer;
 }
 
