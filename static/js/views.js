@@ -60,13 +60,15 @@ iron.views = {
     display_nodes: function(container, data) {
 
         // Create new nodes
+        var last = 0;
         for (i in data) {
 
             // Get node
             node = data[i];
 
             // Check if already exists
-            if ($('li[item-id='+node.id+']', container).length) {
+            if ($('> li[item-id='+node.id+']', container).length) {
+                last = node.id;
                 continue;
             }
 
@@ -92,7 +94,15 @@ iron.views = {
 
             branch += '</li>';
 
-            $('> li.action', container).before(branch);
+            // Insert after the last item
+            if (last) {
+                alert(last);
+                $('> li[item-id='+last+']', container).after(branch);
+            }
+            // Other wise put it before the action element
+            else {
+                container.prepend(branch);
+            }
 
             // Add event handlers
             // Toggle children
@@ -114,6 +124,9 @@ iron.views = {
                 var parentel = $(this).closest('li');
                 iron.actions.display_add_form(parentel);
             });
+
+            // Update last
+            last = node.id;
         }
 
         return branch;
