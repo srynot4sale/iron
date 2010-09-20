@@ -212,6 +212,42 @@ var iron = {
 
             iron.data.update_node(nextid, parentid, text, order);
         },
+
+
+        archive_node: function(itemid) {
+
+            var node = iron.data.store[itemid];
+
+            // Re order other siblings
+            var siblings = iron.data.fetch_branch(node.parent_id);
+
+            // Check actually has siblings
+            if (siblings.length) {
+                for (sorder in siblings) {
+                    if (siblings[sorder].order > node.order) {
+                        siblings[sorder].order -= 1;
+                    }
+                }
+            }
+
+            // Delete node from store
+            delete iron.data.store[itemid];
+
+            // Get parent
+            var parent = iron.data.store[node.parent_id];
+
+            if (parent == undefined) {
+                return;
+            }
+
+            // Check if item is listed under this parent, then remove
+            var index = parent.children.indexOf(parseInt(itemid));
+
+            if (index != -1) {
+                parent.children.splice(index, 1);
+                parent.children_count -= 1;
+            }
+        }
     }
 }
 

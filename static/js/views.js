@@ -30,8 +30,15 @@ iron.views = {
             // Update old count
             count.html(length);
 
-            // Make sure it's visible
-            count.closest('span.meta').show();
+            // If more than zero
+            if (length) {
+                // Make sure it's visible
+                count.closest('span.meta').show();
+            }
+            else {
+                // Hude
+                count.closest('span.meta').hide();
+            }
         }
 
         // Add new node
@@ -92,6 +99,7 @@ iron.views = {
                 branch += '<span class="add" title="Add before">+</span>';
                 branch += '<span class="up" title="Move up">&uarr;</span>';
                 branch += '<span class="down" title="Move down">&darr;</span>';
+                branch += '<span class="archive" title="Archive">a</span>';
                 branch += '</span>';
                 branch += '</div>';
                 branch += '<ul id="cont-'+node.id+'" branch-id="'+node.id+'" style="display: none;"></ul>';
@@ -155,6 +163,12 @@ iron.views = {
             $('> li[item-id='+node.id+'] > div.item span.after span.down', container).click(function() {
                 var parentel = $(this).closest('li');
                 iron.actions.move_node('down', parentel);
+            });
+
+            // Archive
+            $('> li[item-id='+node.id+'] > div.item span.after span.archive', container).click(function() {
+                var parentel = $(this).closest('li');
+                iron.actions.archive_node(parentel);
             });
 
             // Update last

@@ -101,6 +101,29 @@ iron.actions = {
                 }
             }
         }
-
     },
+
+
+    archive_node: function(parent) {
+
+        var itemid = parent.attr('item-id');
+        var node = iron.data.store[itemid];
+
+        if (node == undefined) {
+            return;
+        }
+
+        // Do not archive nodes with children
+        if (node.children && node.children.length) {
+            return;
+        }
+
+        iron.data.archive_node(itemid);
+
+        // Delete node
+        parent.remove();
+
+        // Rerender the branch
+        iron.actions.display_branch(node.parent_id);
+    }
 };
