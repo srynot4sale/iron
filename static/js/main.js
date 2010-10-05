@@ -7,11 +7,11 @@ var iron = {
             0: {
                 text: 'Root node',
                 children_count: 2,
-                children: [1,2],
+                children: [],
                 parent_id: false,
                 order: 0
             },
-
+/*
             1: {
                 text: 'Test 1',
                 children_count: 2,
@@ -48,6 +48,48 @@ var iron = {
                 parent_id: 4,
                 order: 0
             }
+*/
+        },
+
+
+        load_branch: function(rootid, callback) {
+
+            var root = iron.data.store[rootid];
+
+            if (root == undefined) {
+                return;
+            }
+
+            var load = function(rootid, callback) {
+
+                $.getJSON('/json/'+rootid, function(data) {
+
+                    // Loop through data
+                    for (item in data) {
+                        item = data[item];
+                        id = item['id'];
+                        delete item['id'];
+                        iron.data.store[id] = item;
+
+                        var root = iron.data.store[item['parent_id']];
+
+                        if (root.children == undefined) {
+                            root.children = [];
+                        }
+
+                        root.children.push(id);
+              //          root.children_count += 1
+                    }
+
+                    if (callback !== undefined) {
+                        callback();
+                    }
+                });
+
+            };
+
+            load(rootid, callback);
+
         },
 
 
@@ -66,6 +108,11 @@ var iron = {
             // If root does not exist, or has no children
             if (root == undefined || root.children_count < 1) {
                 return [];
+            }
+
+            // Trigger loading of all child branches
+            if (rootid != 0) {
+                iron.data.load_branch(rootid);
             }
 
             var ordered = [];
@@ -258,5 +305,5 @@ $(function() {
      *
      * - Build root nodes view
      */
-    iron.actions.display_root_branch();
+    iron.data.load_branch(0, iron.actions.display_root_branch);
 });

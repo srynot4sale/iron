@@ -122,14 +122,52 @@ def index2():
 
 # Define json format data
 @bottle.get('/json/:parent#[0-9]+#')
-def json(parent):
+def getjson(parent):
+
+    if parent == '0':
+        parent_item = items.item()
+        parent_item.id = 0
+        parent_item.text = 'Root'
+    else:
+        parent_item = items.item()
+        parent_item.load(parent)
+
     # Load children of parent
-    parent_item = items.item()
-    parent_item.load(parent)
     children = parent_item.get_children()
 
+    childs = []
+    order = 0
+    for child in children:
+
+        grand = child.get_children()
+
+        if parent == '0':
+            dc = {}
+            dc['id'] = child.id
+            dc['text'] = child.text
+            dc['order'] = order
+            dc['children_count'] = len(grand)
+            dc['parent_id'] = int(parent)
+
+            order += 1
+            childs.append(dc)
+
+        # Load children's children
+        gorder = 0
+        for g in grand:
+
+            dc = {}
+            dc['id'] = g.id
+            dc['text'] = g.text
+            dc['order'] = gorder
+            dc['children_count'] = child.num_children()
+            dc['parent_id'] = int(child.id)
+
+            gorder += 1
+            childs.append(dc)
+
     # Return as json formatted string
-    return json.dumps(children)
+    return json.dumps(childs)
 
 
 bottle.run(

@@ -59,6 +59,11 @@ class item():
         return loadChildren(self.id)
 
 
+    # Count children
+    def num_children(self):
+        return countChildren(self.id)
+
+
     # Archive this item
     def set_archived(self):
         c = conn.cursor()
@@ -203,3 +208,56 @@ def loadChildren(parent):
 
     c.close()
     return items
+
+
+# Return a count of all children of a parent
+# Parent 0 = the root nodes
+def countChildren(parent):
+    c = conn.cursor()
+    c.execute(
+        """
+            SELECT
+                COUNT("data"."id") AS "count"
+            FROM
+                "data"
+            INNER JOIN
+                "relationship"
+             ON "relationship"."primary" = "data"."id"
+            LEFT JOIN
+                (
+                    SELECT
+                        "relationship"."secondary" AS "id",
+                        COUNT("relationship"."uid") AS "count"
+                    FROM
+                        "relationship"
+                    INNER JOIN
+                        "data"
+                     ON "data"."id" = "relationship"."primary"
+                    WHERE
+                        "data"."current" = 1
+                    AND "data"."archive" = 0
+                    AND "relationship"."type" = :rel
+                    GROUP BY
+                        "relationship"."secondary"
+                ) AS "children"
+             ON "children"."id" = "data"."id"
+            WHERE
+                "data"."current" = 1
+            AND "data"."archive" = 0
+            AND "relationship"."secondary" = :parent
+            AND "relationship"."type" = :rel
+        """,
+        {
+            'parent': parent,
+            'rel': relationships.CHILD_OF,
+        }
+    )
+
+    count = 0
+
+    if c:
+        for data in c:
+            count = data['count']
+
+    c.close()
+    return count
