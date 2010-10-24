@@ -11,44 +11,6 @@ var iron = {
                 parent_id: false,
                 order: 0
             },
-/*
-            1: {
-                text: 'Test 1',
-                children_count: 2,
-                children: [3,4],
-                parent_id: 0,
-                order: 0
-            },
-
-            2: {
-                text: 'Test 2',
-                children_count: 0,
-                parent_id: 0,
-                order: 1
-            },
-
-            3: {
-                text: 'Child of Test 1',
-                children_count: 0,
-                parent_id: 1,
-                order: 0
-            },
-
-            4: {
-                text: 'Awesome',
-                children_count: 1,
-                children: [5],
-                parent_id: 1,
-                order: 1
-            },
-
-            5: {
-                text: 'Lols',
-                children_count: 0,
-                parent_id: 4,
-                order: 0
-            }
-*/
         },
 
 
