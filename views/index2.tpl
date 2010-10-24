@@ -9,6 +9,10 @@
         <script type="text/javascript" src="/static/js/views.js"></script>
 
         <link rel="stylesheet" href="/static/css/main.css" type="text/css" media="screen" />
+
+        <script type="text/javascript">
+            var data = {{json}};
+        </script>
     </head>
 
     <body>

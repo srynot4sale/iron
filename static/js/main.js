@@ -14,6 +14,31 @@ var iron = {
         },
 
 
+        process: function(data, rootid, callback) {
+            var root = iron.data.store[rootid];
+
+            // Loop through data
+            for (item in data) {
+                item = data[item];
+                id = item['id'];
+                delete item['id'];
+                iron.data.store[id] = item;
+
+                var root = iron.data.store[item['parent_id']];
+
+                if (root.children == undefined) {
+                    root.children = [];
+                }
+
+                root.children.push(id);
+            }
+
+            if (callback !== undefined) {
+                callback();
+            }
+        },
+
+
         load_branch: function(rootid, callback) {
 
             var root = iron.data.store[rootid];
@@ -25,26 +50,7 @@ var iron = {
             var load = function(rootid, callback) {
 
                 $.getJSON('/json/'+rootid, function(data) {
-
-                    // Loop through data
-                    for (item in data) {
-                        item = data[item];
-                        id = item['id'];
-                        delete item['id'];
-                        iron.data.store[id] = item;
-
-                        var root = iron.data.store[item['parent_id']];
-
-                        if (root.children == undefined) {
-                            root.children = [];
-                        }
-
-                        root.children.push(id);
-                    }
-
-                    if (callback !== undefined) {
-                        callback();
-                    }
+                    iron.data.process(data, rootid, callback);
                 });
 
             };
@@ -266,5 +272,5 @@ $(function() {
      *
      * - Build root nodes view
      */
-    iron.data.load_branch(0, iron.actions.display_root_branch);
+    iron.data.process(data, 0, iron.actions.display_root_branch);
 });

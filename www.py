@@ -117,12 +117,18 @@ def archive(itemid):
 @bottle.get('/index2')
 @bottle.view('index2')
 def index2():
-    return {}
+    return {
+        'json': createjson('0')
+    }
 
 
 # Define json format data
 @bottle.get('/json/:parent#[0-9]+#')
 def getjson(parent):
+    return createjson(parent)
+
+
+def createjson(parent):
 
     if parent == '0':
         parent_item = items.item()
