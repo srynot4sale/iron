@@ -40,7 +40,6 @@ var iron = {
                         }
 
                         root.children.push(id);
-              //          root.children_count += 1
                     }
 
                     if (callback !== undefined) {
