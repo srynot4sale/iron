@@ -160,7 +160,7 @@ def getjson(parent):
             dc['id'] = g.id
             dc['text'] = g.text
             dc['order'] = gorder
-            dc['children_count'] = child.num_children()
+            dc['children_count'] = g.num_children()
             dc['parent_id'] = int(child.id)
 
             gorder += 1
