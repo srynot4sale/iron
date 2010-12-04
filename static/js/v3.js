@@ -52,6 +52,40 @@ iron.render_branches = function(parentid, data) {
         iron.render_branch(container, data[branch]);
     }
 
+    // Add new child branch form
+    var addform = $('> li.add', container);
+
+    if (!addform.length) {
+        var addform = $('<li class="add"><input type="text" value="Add new" /></li>');
+        container.append(addform);
+
+        $('input', addform).focus(function() {
+            iron.logger('Add form gains focus');
+            $(this).addClass('hasinput');
+
+            if ($(this).val() == 'Add new') {
+                $(this).val('');
+            }
+        });
+
+        $('input', addform).blur(function() {
+            iron.logger('Add form blurs');
+
+            if ($(this).val() == '') {
+                $(this).removeClass('hasinput');
+                $(this).val('Add new');
+            }
+        });
+
+        $('input', addform).keyup(function(event) {
+            if (event.keyCode == 13) {
+                iron.logger('Save new branch with content "'+$(this).val()+'"');
+
+                $(this).blur();
+            }
+        });
+    }
+
     // Show branches
     container.show();
 
