@@ -11,6 +11,35 @@ iron.views = {
     },
 
 
+    /**
+     * Update branch item count
+     *
+     * @param   integer branchid
+     * @param   integer count Item count
+     */
+    update_branch_count: function(branchid, count) {
+
+        // Load html item
+        var meta = $('ul#cont-'+branchid+' div.item span.meta');
+        var element = $('> span.children-count');
+
+        if (count == parseInt(element.html())) {
+            return;
+        }
+
+        // Update
+        element.html(count);
+
+        // If zero, hide
+        if (!count) {
+            meta.hide();
+        }
+        else {
+            meta.show();
+        }
+    },
+
+
     /*
      * Build and display a branch's markup
      */
@@ -19,29 +48,7 @@ iron.views = {
         // Get container
         var container = $('ul#cont-'+rootid);
 
-        // Get count
-        var count = $('> div.item span.meta span.children-count', container.parent());
-
-        // Get number of items in data
-        var length = data.length;
-
-        // Compare with old count
-        if (length != parseInt(count.html())) {
-            // Update old count
-            count.html(length);
-
-            // If more than zero
-            if (length) {
-                // Make sure it's visible
-                count.closest('span.meta').show();
-            }
-            else {
-                // Hude
-                count.closest('span.meta').hide();
-            }
-        }
-
-        // Add new node
+        // Add "Add new" node
         if ($('> li.action', container).length < 1) {
             add  = '<li class="action">';
             add += '<span class="add">Add new</span>';
@@ -58,6 +65,9 @@ iron.views = {
 
         // Render branch data
         iron.views.display_nodes(container, data);
+
+        // Update count
+        iron.views.update_branch_count(rootid, data.length)
 
         // Show container
         container.show();

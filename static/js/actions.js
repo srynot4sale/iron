@@ -3,9 +3,9 @@ iron.actions = {
     /**
      * Display root branch
      */
-    display_root_branch: function() {
+    display_root_branch: function(data) {
         iron.views.setup_root_branch();
-        iron.actions.display_branch(0);
+        iron.actions.display_branch(0, data);
     },
 
 
@@ -14,10 +14,10 @@ iron.actions = {
      *
      * @param   rootid  Root id for this branch
      */
-    display_branch: function(rootid) {
+    display_branch: function(rootid, data) {
 
         // Get branch data
-        var data = iron.data.fetch_branch(rootid);
+//        var data = iron.data.fetch_branch(rootid);
 
         iron.views.display_branch(rootid, data);
     },

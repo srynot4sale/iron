@@ -272,5 +272,7 @@ $(function() {
      *
      * - Build root nodes view
      */
-    iron.data.process(data, 0, iron.actions.display_root_branch);
+    iron.actions.display_root_branch(data)
+
+//    iron.data.process(data, 0, iron.actions.display_root_branch);
 });
