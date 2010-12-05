@@ -26,23 +26,13 @@ h1 {
 #content ul.container li.branch span.text {
     cursor: pointer;
 }
-/*
-#content ul.branch li.leaf > span.after {
-    padding-left: 5px;
-    visibility: hidden;
-}
 
-#content ul.branch li.leaf > span.after span {
+#content ul.container li.branch span.archive {
     color: #00f;
-    padding: 0 3px;
+    padding: 0 5px;
     margin: 0 2px;
     cursor: pointer;
 }
-
-#content ul.branch li.leaf div.item:hover span.after {
-    visibility: visible;
-}
-*/
 
 #content ul.container li.add {
     padding: 3px 17px 0;
@@ -71,16 +61,22 @@ a.external {
 
 #logmessages {
     position: absolute;
-    right: 20px;
+    right: 2px;
     width: 20%;
     top: 2px;
+    bottom: 2px;
+    overflow: auto;
 }
 
 #logmessages div {
     background-color: #666;
-    color: #fff;
-    padding: 5px;
     margin: 2px 0;
     width: 100%;
+}
+
+#logmessages div span {
+    display: block;
+    padding: 5px;
     font-size: 12px;
+    color: #fff;
 }

@@ -10,7 +10,7 @@ var iron = {}
 iron.logger = function(message, func, params) {
 
     // Display for debugging purposes
-    $('#logmessages').prepend('<div>'+message+'</div>');
+    $('#logmessages').prepend('<div><span>'+message+'</span></div>');
 }
 
 
@@ -81,7 +81,8 @@ iron.render_branches = function(parentid, data) {
             if (event.keyCode == 13) {
                 iron.logger('Save new branch with content "'+$(this).val()+'"');
 
-                $(this).blur();
+                iron.save_branch($(this).closest('ul').attr('parent-id'), $(this).val());
+                $(this).closest('li.add').remove();
             }
         });
     }
@@ -113,7 +114,9 @@ iron.render_branch = function(container, data) {
     if (!branch.length) {
         var branch = $('<li class="branch" id="b-'+branchid+'" branch-id="'+branchid+'"></li>');
         var branchcontent = $('<span class="text"></span>');
+        var branchactions = $('<span class="archive">a</span>');
         branch.append(branchcontent);
+        branch.append(branchactions);
         container.append(branch);
 
         iron.logger('Creating branch');
@@ -145,6 +148,12 @@ iron.attach_branch_triggers = function(branch) {
     $('span.text', branch).click(function() {
         iron.toggle_branch(branchid);
     });
+
+    // Create "archive" click event on branch archive
+    $('span.archive', branch).click(function() {
+        iron.archive_branch(branchid);
+        branch.remove();
+    });
 }
 
 
@@ -167,14 +176,62 @@ iron.toggle_branch = function(branchid) {
     // Otherwise, load and show
     else {
         // Load branch markup
-        $.getJSON('/json/'+branchid, function(data) {
-            iron.render_branches(branchid, data);
-        });
-
+        iron.load_branch(branchid);
         iron.logger('Show children of branch '+branchid);
     }
 }
 
+
+/**
+ * Archive a branch
+ *
+ * @param   integer branchid
+ */
+iron.archive_branch = function(branchid) {
+
+    iron.logger('Archive branch '+branchid);
+    $.post('/archive/'+branchid);
+}
+
+
+/**
+ * Save branch
+ *
+ * @param   integer parentid
+ * @param   string  content
+ */
+iron.save_branch = function(parentid, content) {
+
+    iron.logger('Saving child branch of '+parentid);
+
+    // Generate url
+    var url = '/new/'+ parentid;
+
+    // Generate data
+    var data = {
+        text: content
+    }
+
+    // Save then update branch
+    $.post(
+        url,
+        data,
+        function() {
+            iron.load_branch(parentid);
+        }
+    );
+}
+
+
+iron.load_branch = function(branchid) {
+
+    iron.logger('Requesting branch '+branchid);
+
+    $.getJSON('/json/'+branchid, function(data) {
+        iron.logger('Retrieved branch '+branchid);
+        iron.render_branches(branchid, data);
+    });
+}
 
 /**
  * Run on start up
