@@ -151,7 +151,11 @@ iron.attach_branch_triggers = function(branch) {
 
     // Create "archive" click event on branch archive
     $('span.archive', branch).click(function() {
-        iron.archive_branch(branchid);
+
+        iron.logger('Archive branch '+branchid);
+        $.post('/archive/'+branchid);
+
+        // Remove from display
         branch.remove();
     });
 }
@@ -179,18 +183,6 @@ iron.toggle_branch = function(branchid) {
         iron.load_branch(branchid);
         iron.logger('Show children of branch '+branchid);
     }
-}
-
-
-/**
- * Archive a branch
- *
- * @param   integer branchid
- */
-iron.archive_branch = function(branchid) {
-
-    iron.logger('Archive branch '+branchid);
-    $.post('/archive/'+branchid);
 }
 
 
