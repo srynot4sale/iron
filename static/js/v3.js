@@ -63,8 +63,46 @@ iron.render_branches = function(parentid, data) {
     }
 
     // Populate branches
-    for (branch in data) {
-        iron.render_branch(container, data[branch]);
+    var l = 0; // local count
+
+    var localbranches = $('li.branch', container);
+    var remotebranches = data;
+
+    var rbranch;
+    var lbranch;
+
+    while (remotebranches.length || localbranches.length - l) {
+        // Grab next branches
+        if (remotebranches.length) {
+            rbranch = remotebranches.shift();
+        } else {
+            rbranch = undefined;
+        }
+
+        if (localbranches.length - l) {
+            lbranch = $(localbranches[l]);
+            l += 1;
+        } else {
+            lbranch = undefined;
+        }
+
+        // Compare
+        if (lbranch != undefined && rbranch != undefined &&
+            lbranch.attr('branch-id') == rbranch.id) {
+            iron.logger('Remote branch the same, no need to change '+rbranch.id);
+            continue;
+        }
+
+        // If different, delete local
+        if (lbranch != undefined) {
+            iron.logger('Branches differ, delete local '+lbranch.attr('branch-id'));
+            lbranch.remove();
+        }
+
+        // If remote exists, add
+        if (rbranch != undefined) {
+            iron.render_branch(container, rbranch);
+        }
     }
 
     // Add new child branch form
