@@ -25,7 +25,7 @@ iron.logger = function(message, func, params) {
     $('#logmessages').prepend('<div message="'+latest+'"><span>'+message+'</span></div>')
     window.setTimeout(function() {
         $('#logmessages div[message="'+latest+'"]').fadeOut();
-    }, 3000);
+    }, 10000);
 }
 
 
