@@ -141,7 +141,12 @@ iron.render_branch = function(container, data) {
     }
 
     // Update branch content
-    $('span.text', branch).html(data.text);
+    var text = data.text;
+    if (data.children_count) {
+        text += ' ('+data.children_count+')';
+    }
+
+    $('span.text', branch).html(text);
 
     iron.logger('Render branch '+branchid+' complete');
 }
