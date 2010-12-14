@@ -3,6 +3,7 @@
 #
 #
 
+import json
 import time
 import relationships
 from data import conn
@@ -261,3 +262,36 @@ def countChildren(parent):
 
     c.close()
     return count
+
+
+
+# Create json array of items
+def createjson(parent):
+
+    if parent == '0':
+        parent_item = item()
+        parent_item.id = 0
+        parent_item.text = 'Root'
+    else:
+        parent_item = item()
+        parent_item.load(parent)
+
+    # Load children of parent
+    children = parent_item.get_children()
+
+    data = []
+    for child in children:
+
+        grand = child.get_children()
+
+        dc = {}
+        dc['id'] = child.id
+        dc['text'] = child.text
+        dc['children_count'] = len(grand)
+        dc['parent_id'] = int(parent)
+
+        data.append(dc)
+
+
+    # Return as json formatted string
+    return json.dumps(data)

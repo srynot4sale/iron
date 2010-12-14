@@ -1,28 +1,29 @@
-% for item in items:
-<p class="item">
-% if item.count:
-    <a class="parent" href="/children/{{item.id}}" title="#{{item.id}}: created {{item.updated}}">{{item.text}} ({{item.count}})</a>
-% elif mobile:
-    <a class="parent" href="/children/{{item.id}}" title="#{{item.id}}: created {{item.updated}}">{{item.text}}</a>
-% else:
-    <span class="parent" title="#{{item.id}}: created {{item.updated}}">{{item.text}}</span>
-% end
-% if not mobile:
-<a class="new open-dialog" href="/new/{{item.id}}">+</a>
-% end
-% if not item.count:
-    <a class="archive" href="/archive/{{item.id}}">a</a>
-% end
-</p>
-% end
+<html>
+    <head>
+        <title>Iron</title>
+
+        <script type="text/javascript" src="/static/js/jquery-1.3.2.min.js"></script>
+
+        <script type="text/javascript" src="/static/js/v3.js"></script>
+
+        <link rel="stylesheet" href="/static/css/main.css" type="text/css" media="screen" />
+
+        <script type="text/javascript">
+            var data = {{json}};
+        </script>
+    </head>
+
+    <body>
+
+        <h1><a href="/">Iron</a></h1>
+
+        <div id="content">
 
 
-% if len(items) == 0:
-<p>No items available</p>
-% end
+        </div>
 
-% if homepage == True:
-% rebase template title=False, mobile=mobile
-% elif mobile:
-% rebase template title=parent, mobile=mobile
-% end
+        <div id="logmessages">
+        </div>
+
+    </body>
+</html>
