@@ -127,11 +127,16 @@ iron.render_branch = function(container, data) {
 
     // Create if doesn't exist
     if (!branch.length) {
-        var branch = $('<li class="branch" id="b-'+branchid+'" branch-id="'+branchid+'"></li>');
+        var branch = $('<li class="branch" id="b-'+branchid+'" branch-id="'+branchid+'" child-count="'+data.children_count+'"></li>');
         var branchcontent = $('<span class="text"></span>');
         var branchactions = $('<span class="archive">a</span>');
         branch.append(branchcontent);
-        branch.append(branchactions);
+
+        // Add actions if no children
+        if (!data.children_count) {
+            branch.append(branchactions);
+        }
+
         container.append(branch);
 
         iron.logger('Creating branch');
