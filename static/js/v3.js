@@ -120,8 +120,6 @@ iron.render_branch = function(container, data) {
     // Branch ID
     var branchid = data.id;
 
-    iron.logger('Render branch '+branchid);
-
     // Load branch
     var branch = $('li#b-'+branchid, container);
 
@@ -137,7 +135,11 @@ iron.render_branch = function(container, data) {
             branch.append(branchactions);
         }
 
-        container.append(branch);
+        if ($('> li.add', container).length) {
+            $('> li.add', container).before(branch);
+        } else {
+            container.append(branch);
+        }
 
         iron.logger('Creating branch');
 
