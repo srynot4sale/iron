@@ -1,6 +1,12 @@
 var iron = {}
 
 /**
+ * Log messages
+ */
+iron.log_messages = [];
+
+
+/**
  * Logger
  *
  * @param   string  message
@@ -9,8 +15,17 @@ var iron = {}
  */
 iron.logger = function(message, func, params) {
 
+    // Add message to array
+    iron.log_messages.push([message, func, params]);
+
+    // Latest message
+    var latest = iron.log_messages.length;
+
     // Display for debugging purposes
-    $('#logmessages').prepend('<div><span>'+message+'</span></div>');
+    $('#logmessages').prepend('<div message="'+latest+'"><span>'+message+'</span></div>')
+    window.setTimeout(function() {
+        $('#logmessages div[message="'+latest+'"]').fadeOut();
+    }, 3000);
 }
 
 
