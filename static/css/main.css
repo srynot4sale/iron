@@ -23,7 +23,7 @@ h1 {
     padding: 5px 20px 0;
 }
 
-#content ul.container li.branch span.text {
+#content ul.container li.branch span.content {
     cursor: pointer;
 }
 

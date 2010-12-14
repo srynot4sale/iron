@@ -39,6 +39,9 @@ iron.render_branches = function(parentid, data) {
 
     iron.logger('Render child branches of '+parentid);
 
+    // Child count
+    var child_count = data.length;
+
     // Load container
     var container = $('div#content ul#c-'+parentid);
 
@@ -140,6 +143,15 @@ iron.render_branches = function(parentid, data) {
         });
     }
 
+    // Keep child count up-to-date
+    var parentbranch = $('div#content li#b-'+parentid);
+    var parentdata = {
+        'text': $('> span.content span.text', parentbranch).html(),
+        'children_count': child_count
+    };
+
+    iron.update_branch(parentbranch, parentdata);
+
     // Show branches
     container.show();
 
@@ -163,8 +175,14 @@ iron.render_branch = function(container, data) {
 
     // Create if doesn't exist
     if (!branch.length) {
-        var branch = $('<li class="branch" id="b-'+branchid+'" branch-id="'+branchid+'" child-count="'+data.children_count+'"></li>');
-        var branchcontent = $('<span class="text"></span>');
+        var html = '';
+        html += '<li class="branch" id="b-'+branchid+'" ';
+        html += 'branch-id="'+branchid+'" ';
+        html += 'child-count="'+data.children_count+'" ';
+        html += 'parent-id="'+data.parent_id+'"></li>';
+        branch = $(html);
+
+        var branchcontent = $('<span class="content"></span>');
         var branchactions = $('<span class="archive">a</span>');
         branch.append(branchcontent);
 
@@ -185,15 +203,27 @@ iron.render_branch = function(container, data) {
         iron.attach_branch_triggers(branch);
     }
 
+    iron.update_branch(branch, data);
+
+    iron.logger('Render branch '+branchid+' complete');
+}
+
+
+/**
+ * Update branch content
+ */
+iron.update_branch = function(branch, data) {
+
     // Update branch content
-    var text = data.text;
+    var text = '<span class="text">'+data.text+'</span>';
     if (data.children_count) {
         text += ' ('+data.children_count+')';
     }
 
-    $('span.text', branch).html(text);
+    $('> span.content', branch).html(text);
 
-    iron.logger('Render branch '+branchid+' complete');
+    // Update child count
+    branch.attr('child-count', data.children_count);
 }
 
 
@@ -210,7 +240,7 @@ iron.attach_branch_triggers = function(branch) {
     iron.logger('Attaching events to branch '+branchid);
 
     // Create "toggle" click event on branch content
-    $('span.text', branch).click(function() {
+    $('span.content', branch).click(function() {
         iron.toggle_branch(branchid);
     });
 
@@ -222,6 +252,9 @@ iron.attach_branch_triggers = function(branch) {
 
         // Remove from display
         branch.remove();
+
+        // Reload branch
+        iron.load_branch(branch.attr('parent-id'));
     });
 }
 
