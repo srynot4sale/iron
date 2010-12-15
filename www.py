@@ -2,18 +2,21 @@
 #
 #
 #
-import os.path
+import sys, os, os.path
+
+# Change working directory so relative paths (and template lookup) work again
+sys.path.append(os.path.dirname(__file__)+'/lib')
+sys.path.append(os.path.dirname(__file__))
+os.chdir(os.path.dirname(__file__))
 
 # Load bottle framework
-from lib import bottle
+import bottle
 
 # Load iron's common library
 from lib import common
 
 # Load data library
 from lib import items
-
-bottle.debug(True)
 
 
 # Static files
@@ -68,9 +71,15 @@ def getjson(parent):
     return items.createjson(parent)
 
 
+# If we are running in dev mode
+if __name__ == '__main__':
+    bottle.debug(True)
 
+    bottle.run(
+        host = '127.0.0.1',
+        port = 8083
+    )
 
-bottle.run(
-    host = '127.0.0.1',
-    port = 8083
-)
+# Otherwise must behind a web server
+else:
+    application = bottle.default_app()

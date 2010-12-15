@@ -1,6 +1,6 @@
 import os
 
-import bottle, bottle
+import bottle
 
 cwd = os.getcwd()
 
