@@ -1,0 +1,4 @@
+Works behind WSGI, or invoking the www.py file directly
+
+Maintainer:
+Aaron Barnes <aaron.barnes@hbcosmo.com>
