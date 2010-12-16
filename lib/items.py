@@ -9,7 +9,7 @@ import sys
 if sys.version_info[0] >= 3 or sys.version_info[1] >= 6:
     import json
 else:
-    import simplejson
+    import simplejson as json
 
 import time
 import relationships
