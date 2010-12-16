@@ -10,6 +10,10 @@ def prettyPrint(s):
     print json.dumps(json.loads(s.read()), sort_keys=True, indent=4)
 
 
+def returnReal(s):
+    return json.loads(s.read())
+
+
 class database:
     """Basic wrapper class for operations on a couchDB"""
 
@@ -64,7 +68,9 @@ class database:
             r = self.put(''.join(['/', dbName, '/', docId]), body)
         else:
             r = self.post(''.join(['/', dbName, '/']), body)
-        prettyPrint(r)
+#        prettyPrint(r)
+
+        return returnReal(r)['id']
 
     def deleteDoc(self, dbName, docId):
         # XXX Crashed if resource is non-existent; not so for DELETE on db. Bug?
