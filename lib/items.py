@@ -3,7 +3,14 @@
 #
 #
 
-import json
+import sys
+
+# If version 2.6 or greater
+if sys.version_info[0] >= 3 or sys.version_info[1] >= 6:
+    import json
+else:
+    import simplejson
+
 import time
 import relationships
 from data import conn
