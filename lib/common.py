@@ -1,8 +1,8 @@
-import os
+import os, os.path
 
 import bottle
 
-cwd = os.getcwd()
+cwd = os.path.dirname(os.path.dirname(__file__))
 
 # Toggle mobile version for the client
 def togglemobile(status):

@@ -4,10 +4,7 @@
 #
 import sys, os, os.path
 
-# Change working directory so relative paths (and template lookup) work again
-sys.path.append(os.path.dirname(__file__)+'/lib')
 sys.path.append(os.path.dirname(__file__))
-os.chdir(os.path.dirname(__file__))
 
 # Load bottle framework
 import bottle
@@ -82,4 +79,5 @@ if __name__ == '__main__':
 
 # Otherwise must behind a web server
 else:
+    bottle.TEMPLATE_PATH = [os.path.join(common.cwd, 'views')]
     application = bottle.default_app()
