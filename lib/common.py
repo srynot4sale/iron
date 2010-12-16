@@ -1,8 +1,18 @@
 import os, os.path
-
+import sys
 import bottle
 
+
+# If version 2.6 or greater
+if sys.version_info[0] >= 3 or sys.version_info[1] >= 6:
+    import json
+else:
+    import simplejson as json
+
+
+# Setup paths
 cwd = os.path.dirname(os.path.dirname(__file__))
+
 
 # Toggle mobile version for the client
 def togglemobile(status):
