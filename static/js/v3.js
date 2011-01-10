@@ -313,6 +313,11 @@ iron.save_branch = function(parentid, content) {
 }
 
 
+/**
+ * Load branch from server and render
+ *
+ * @param   integer branchid
+ */
 iron.load_branch = function(branchid) {
 
     iron.logger('Requesting branch '+branchid);
@@ -322,6 +327,7 @@ iron.load_branch = function(branchid) {
         iron.render_branches(branchid, data);
     });
 }
+
 
 /**
  * Run on start up
