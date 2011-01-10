@@ -185,11 +185,7 @@ iron.render_branch = function(container, data) {
         var branchcontent = $('<span class="content"></span>');
         var branchactions = $('<span class="archive">a</span>');
         branch.append(branchcontent);
-
-        // Add actions if no children
-        if (!data.children_count) {
-            branch.append(branchactions);
-        }
+        branch.append(branchactions);
 
         if ($('> li.add', container).length) {
             $('> li.add', container).before(branch);
@@ -210,20 +206,33 @@ iron.render_branch = function(container, data) {
 
 
 /**
- * Update branch content
+ * Update branch content (but not it's children)
+ *
+ * @param   jquery  branch
+ * @param   object  data
  */
 iron.update_branch = function(branch, data) {
+
+    var content = $('> span.content', branch);
+    var actions = $('> span.archive', branch);
 
     // Update branch content
     var text = '<span class="text">'+data.text+'</span>';
     if (data.children_count) {
         text += ' ('+data.children_count+')';
     }
-
-    $('> span.content', branch).html(text);
+    content.html(text);
 
     // Update child count
     branch.attr('child-count', data.children_count);
+
+    // Hide actions if has children
+    if (data.children_count) {
+        actions.hide();
+    }
+    else {
+        actions.show();
+    }
 }
 
 
