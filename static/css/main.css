@@ -68,7 +68,12 @@ a.external {
     overflow: auto;
 }
 
+#logmessages #iron-logging-toggle {
+    float: right;
+}
+
 #logmessages div {
+    clear: right;
     background-color: #666;
     margin: 2px 0;
     width: 100%;

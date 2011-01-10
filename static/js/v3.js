@@ -3,7 +3,38 @@ var iron = {}
 /**
  * Log messages
  */
+iron.logging_enabled = true;
 iron.log_messages = [];
+iron.log_message_count = 0;
+
+
+/**
+ * Show toggle logging button
+ */
+iron.logging_toggle = function() {
+
+    var button = $('input#iron-logging-toggle');
+
+    // Add button to body of document if it doesn't exist
+    if (!button.length) {
+        var button = $('<input id="iron-logging-toggle" type="button" />');
+        $('#logmessages').prepend(button);
+
+        // Add click handler
+        button.click(iron.logging_toggle);
+    }
+
+    // Toggle logging
+    if (iron.logging_enabled) {
+        iron.logging_enabled = false;
+        button.val('Enable logging');
+    }
+    else {
+        iron.logging_enabled = true;
+        button.val('Disable logging');
+        iron.logger('Logging enabled');
+    }
+}
 
 
 /**
@@ -15,14 +46,22 @@ iron.log_messages = [];
  */
 iron.logger = function(message, func, params) {
 
+    // Check if enabled
+    if (!iron.logging_enabled) {
+        return;
+    }
+
+    // Limit array length to 100
+    iron.log_messages = iron.log_messages.slice(-99);
+
     // Add message to array
     iron.log_messages.push([message, func, params]);
 
     // Latest message
-    var latest = iron.log_messages.length;
+    var latest = iron.log_message_count++;
 
     // Display for debugging purposes
-    $('#logmessages').prepend('<div message="'+latest+'"><span>'+message+'</span></div>')
+    $('#logmessages #iron-logging-toggle').after('<div message="'+latest+'"><span>'+message+'</span></div>')
     window.setTimeout(function() {
         $('#logmessages div[message="'+latest+'"]').fadeOut();
     }, 10000);
@@ -342,6 +381,9 @@ iron.load_branch = function(branchid) {
  * Run on start up
  */
 $(function() {
+
+    // Display logging toggle button
+    iron.logging_toggle();
 
     // Build root branch
     iron.render_branches(0, data);
