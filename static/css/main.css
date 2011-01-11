@@ -85,3 +85,39 @@ a.external {
     font-size: 12px;
     color: #fff;
 }
+
+
+/**
+ * Smartphone specific stylesheets
+ */
+body.smartphone #logmessages {
+    display: none;
+}
+
+body.smartphone #content ul.container {
+    margin-left: 0;
+}
+
+body.smartphone #content ul.container li {
+    border-top: 2px solid #ccc;
+    clear: both;
+    overflow: auto;
+    padding-left: 10px;
+    padding-right: 0;
+}
+
+body.smartphone #content ul.container li.branch span.content {
+    display: block;
+    padding: 10px 20px;
+    float: left;
+}
+
+body.smartphone #content ul.container li.branch span.archive {
+    float: right;
+    padding: 10px 20px;
+    background-color: #efefef;
+}
+
+body.smartphone #content ul.container li.add {
+    padding: 10px 30px;
+}

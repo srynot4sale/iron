@@ -1,5 +1,18 @@
 var iron = {}
 
+
+/**
+ * Detect if being accessed via smartphone
+ */
+iron.detect_smartphone = function() {
+
+    // User agent string
+    var useragent = navigator.userAgent.toLowerCase();
+
+    return useragent.search('android') > -1;
+}
+
+
 /**
  * Log messages
  */
@@ -381,6 +394,11 @@ iron.load_branch = function(branchid) {
  * Run on start up
  */
 $(function() {
+
+    // Detect smartphone
+    if (iron.detect_smartphone()) {
+        $('body').addClass('smartphone');
+    }
 
     // Display logging toggle button
     iron.logging_toggle();
