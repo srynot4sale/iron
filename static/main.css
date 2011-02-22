@@ -49,14 +49,18 @@ h1 {
 #content ul.container li.add input {
     font-style: italic;
     padding: 2px;
+    padding-left: 20px;
     border: none;
     border-bottom: 1px solid transparent;
     width: 400px;
+    background: url('/static/plus.png') no-repeat scroll 2px center transparent;
 }
 
 #content ul.container li.add input.hasinput {
     font-style: normal;
     border-bottom: 1px solid #ccc;
+    background: none;
+    padding-left: 2px;
 }
 
 a {
