@@ -189,8 +189,22 @@ iron.render_branches = function(parentid, data) {
             if (event.keyCode == 13) {
                 iron.logger('Save new branch with content "'+$(this).val()+'"');
 
-                iron.save_branch($(this).closest('ul').attr('parent-id'), $(this).val());
-                $(this).closest('li.add').remove();
+                // Build temp item for display with loading message
+                var newitemdata = {
+                    id: 0,
+                    children_count: 0,
+                    parent_id: parentid,
+                    text: $(this).val() + ' <i>(saving...)</i>'
+                }
+
+                // Render temp item
+                iron.render_branch(container, newitemdata);
+
+                // Save item and update branch
+                iron.save_branch(parentid, $(this).val());
+
+                // Reset add form ready for new item
+                $(this).val('');
             }
         });
     }
