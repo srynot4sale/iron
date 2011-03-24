@@ -120,7 +120,7 @@ iron.render_branches = function(parentid, data) {
     // Populate branches
     var l = 0; // local count
 
-    var localbranches = $('li.branch', container);
+    var localbranches = $('> li.branch', container);
     var remotebranches = data;
 
     var rbranch;
