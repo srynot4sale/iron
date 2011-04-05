@@ -25,26 +25,26 @@ class relationship():
         c.execute(
             """
                 INSERT INTO
-                    "relationship"
+                    `relationship`
                 (
-                    "type",
-                    "primary",
-                    "secondary",
-                    "added"
+                    `type`,
+                    `primary`,
+                    `secondary`,
+                    `added`
                 )
                 VALUES
                 (
-                    ?,
-                    ?,
-                    ?,
-                    ?
+                    %s,
+                    %s,
+                    %s,
+                    FROM_UNIXTIME(%s)
                 )
             """,
             (
                 self.type,
                 self.primary,
                 self.secondary,
-                str(time.time())
+                int(time.time())
             )
         )
 

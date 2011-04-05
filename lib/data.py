@@ -1,24 +1,18 @@
 # Database connection and utilies
-import sqlite3, os.path
+import MySQLdb
+import MySQLdb.cursors
 
 # Load common file
 from lib import common
 
-# Generate path
-path = os.path.join(common.cwd, 'data.db')
-
-# Check db exists
-if not os.path.isfile(path):
-    raise Exception, 'Could not load data.db %s' % path
+USER = 'iron'
+PASSWORD = 'TANwF3yUThCBuN9G'
 
 # Connect to the db
-conn = sqlite3.connect(path)
-
-# Helper function for returning dicts with named columns
-def dict_factory(cursor, row):
-    d = {}
-    for idx, col in enumerate(cursor.description):
-        d[col[0]] = row[idx]
-    return d
-
-conn.row_factory = dict_factory
+conn = MySQLdb.connect(
+    host = 'localhost',
+    db = 'iron',
+    user = USER,
+    passwd = PASSWORD,
+    cursorclass = MySQLdb.cursors.DictCursor
+)

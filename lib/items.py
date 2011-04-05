@@ -36,11 +36,11 @@ class item():
                 SELECT
                     *
                 FROM
-                    "data"
+                    `data`
                 WHERE
-                    "id" = ?
+                    `id` = %s
                 AND
-                    "current" = 1
+                    `current` = 1
             """,
             (
                 id,
@@ -78,11 +78,11 @@ class item():
         c.execute(
             """
                 UPDATE
-                    "data"
+                    `data`
                 SET
-                    "archive" = 1
+                    `archive` = 1
                 WHERE
-                    "id" = ?
+                    `id` = %s
             """,
             (
                 self.id,
@@ -107,20 +107,20 @@ class item():
         c.execute(
             """
                 INSERT INTO
-                    data
+                    `data`
                 (
-                    text,
-                    updated
+                    `text`,
+                    `updated`
                 )
                 VALUES
                 (
-                    ?,
-                    ?
+                    %s,
+                    FROM_UNIXTIME(%s)
                 )
             """,
             (
                 self.text,
-                str(time.time())
+                int(time.time())
             )
         )
 
@@ -131,11 +131,11 @@ class item():
         c.execute(
             """
                 UPDATE
-                    data
+                    `data`
                 SET
-                    id = ?
+                    `id` = %s
                 WHERE
-                    uid = ?
+                    `uid` = %s
             """,
             (
                 self.id,
@@ -165,45 +165,46 @@ def loadChildren(parent):
     c.execute(
         """
             SELECT
-                "data"."uid",
-                "data"."id",
-                "data"."text",
-                "data"."updated",
-                "data"."current",
-                "children"."count"
+                `data`.`uid`,
+                `data`.`id`,
+                `data`.`text`,
+                `data`.`updated`,
+                `data`.`current`,
+                `children`.`count`
             FROM
-                "data"
+                `data`
             INNER JOIN
-                "relationship"
-             ON "relationship"."primary" = "data"."id"
+                `relationship`
+             ON `relationship`.`primary` = `data`.`id`
             LEFT JOIN
                 (
                     SELECT
-                        "relationship"."secondary" AS "id",
-                        COUNT("relationship"."uid") AS "count"
+                        `relationship`.`secondary` AS `id`,
+                        COUNT(`relationship`.`uid`) AS `count`
                     FROM
-                        "relationship"
+                        `relationship`
                     INNER JOIN
-                        "data"
-                     ON "data"."id" = "relationship"."primary"
+                        `data`
+                     ON `data`.`id` = `relationship`.`primary`
                     WHERE
-                        "data"."current" = 1
-                    AND "data"."archive" = 0
-                    AND "relationship"."type" = :rel
+                        `data`.`current` = 1
+                    AND `data`.`archive` = 0
+                    AND `relationship`.`type` = %s
                     GROUP BY
-                        "relationship"."secondary"
-                ) AS "children"
-             ON "children"."id" = "data"."id"
+                        `relationship`.`secondary`
+                ) AS `children`
+             ON `children`.`id` = `data`.`id`
             WHERE
-                "data"."current" = 1
-            AND "data"."archive" = 0
-            AND "relationship"."secondary" = :parent
-            AND "relationship"."type" = :rel
+                `data`.`current` = 1
+            AND `data`.`archive` = 0
+            AND `relationship`.`secondary` = %s
+            AND `relationship`.`type` = %s
         """,
-        {
-            'parent': parent,
-            'rel': relationships.CHILD_OF,
-        }
+        (
+            relationships.CHILD_OF,
+            parent,
+            relationships.CHILD_OF,
+        )
     )
 
     items = []
@@ -225,40 +226,41 @@ def countChildren(parent):
     c.execute(
         """
             SELECT
-                COUNT("data"."id") AS "count"
+                COUNT(`data`.`id`) AS `count`
             FROM
-                "data"
+                `data`
             INNER JOIN
-                "relationship"
-             ON "relationship"."primary" = "data"."id"
+                `relationship`
+             ON `relationship`.`primary` = `data`.`id`
             LEFT JOIN
                 (
                     SELECT
-                        "relationship"."secondary" AS "id",
-                        COUNT("relationship"."uid") AS "count"
+                        `relationship`.`secondary` AS `id`,
+                        COUNT(`relationship`.`uid`) AS `count`
                     FROM
-                        "relationship"
+                        `relationship`
                     INNER JOIN
-                        "data"
-                     ON "data"."id" = "relationship"."primary"
+                        `data`
+                     ON `data`.`id` = `relationship`.`primary`
                     WHERE
-                        "data"."current" = 1
-                    AND "data"."archive" = 0
-                    AND "relationship"."type" = :rel
+                        `data`.`current` = 1
+                    AND `data`.`archive` = 0
+                    AND `relationship`.`type` = %s
                     GROUP BY
-                        "relationship"."secondary"
-                ) AS "children"
-             ON "children"."id" = "data"."id"
+                        `relationship`.`secondary`
+                ) AS `children`
+             ON `children`.`id` = `data`.`id`
             WHERE
-                "data"."current" = 1
-            AND "data"."archive" = 0
-            AND "relationship"."secondary" = :parent
-            AND "relationship"."type" = :rel
+                `data`.`current` = 1
+            AND `data`.`archive` = 0
+            AND `relationship`.`secondary` = %s
+            AND `relationship`.`type` = %s
         """,
-        {
-            'parent': parent,
-            'rel': relationships.CHILD_OF,
-        }
+        (
+            relationships.CHILD_OF,
+            parent,
+            relationships.CHILD_OF,
+        )
     )
 
     count = 0
