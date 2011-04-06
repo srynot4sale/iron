@@ -221,6 +221,20 @@ iron.render_branches = function(parentid, data) {
     // Show branches
     container.show();
 
+    // Make sortable
+    container.sortable(
+        {
+            items: '> li.branch',
+            handle: '> span.content',
+            axis: 'y'
+        }
+    );
+
+    // Create sort handler
+    container.bind('sortstart', function(event, ui) {
+        container.addClass('iron-sorting-started');
+    });
+
     iron.logger('Render child branches of '+parentid+' complete');
 }
 
@@ -316,7 +330,14 @@ iron.attach_branch_triggers = function(branch) {
 
     // Create "toggle" click event on branch content
     $('span.content', branch).click(function() {
-        iron.toggle_branch(branchid);
+        // Check the branch is not being dragged
+        var container = branch.parent('ul.container');
+        if (container.hasClass('iron-sorting-started')) {
+            container.removeClass('iron-sorting-started');
+        }
+        else {
+            iron.toggle_branch(branchid);
+        }
     });
 
     // Create "archive" click event on branch archive
