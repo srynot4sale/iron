@@ -6,7 +6,8 @@
 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-        <script type="text/javascript" src="/static/jquery-1.3.2.min.js"></script>
+        <script type="text/javascript" src="/static/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="/static/jquery-ui-1.8.11.min.js"></script>
         <script type="text/javascript" src="/static/v3.js"></script>
         <link rel="stylesheet" href="/static/main.css" type="text/css" media="screen" />
 
