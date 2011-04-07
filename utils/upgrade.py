@@ -20,8 +20,7 @@ mc.execute(
 
 
 def get_current_version():
-    c = data.conn.cursor()
-    c.execute(
+    mc.execute(
         """
             SELECT
                 `value`
@@ -32,7 +31,7 @@ def get_current_version():
         """
     )
 
-    result = c.fetchone()
+    result = mc.fetchone()
     if result == None:
         return None
 
@@ -40,8 +39,7 @@ def get_current_version():
 
 
 def set_current_version(version):
-    c = data.conn.cursor()
-    c.execute(
+    mc.execute(
         """
             UPDATE
                 `config`
@@ -94,3 +92,74 @@ if version < upgradeto:
     )
 
     set_current_version(upgradeto)
+
+
+upgradeto = 2011040702
+if version < upgradeto:
+
+    print 'Adding "parentid" column to data table'
+
+    mc.execute(
+        """
+            ALTER TABLE  `data` ADD  `parentid` INT UNSIGNED NOT NULL AFTER  `id` ,
+            ADD INDEX (  `parentid` )
+        """
+    )
+
+    set_current_version(upgradeto)
+
+
+upgradeto = 2011040703
+if version < upgradeto:
+
+    print 'Moving relationships values into "parentid" column of data table'
+
+    mc.execute(
+        """
+            SELECT
+                *
+            FROM
+                `relationship`
+            WHERE
+                `type` = 1
+            AND `secondary` != 0
+        """
+    )
+
+    mc2 = data.conn.cursor()
+    for relationship in mc:
+        mc2.execute(
+            """
+                UPDATE
+                    `data`
+                SET
+                    `parentid` = %s
+                WHERE
+                    `uid` = %s
+            """,
+            (
+                relationship['secondary'],
+                relationship['primary']
+            )
+        )
+
+    mc2.close()
+
+    set_current_version(upgradeto)
+
+
+upgradeto = 2011040704
+if version < upgradeto:
+
+    print 'Dropping "relationship" table'
+
+    mc.execute(
+        """
+            DROP TABLE
+                `relationship`
+        """
+    )
+
+    set_current_version(upgradeto)
+
+mc.close()

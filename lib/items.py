@@ -12,7 +12,6 @@ else:
     import simplejson as json
 
 import time
-import relationships
 from data import conn
 
 class item():
@@ -66,7 +65,7 @@ class item():
 
     # Count children
     def num_children(self):
-        return countChildren(self.id)
+        return len(loadChildren(self.id))
 
 
     # Archive this item
@@ -107,17 +106,20 @@ class item():
                     `data`
                 (
                     `text`,
-                    `updated`
+                    `updated`,
+                    `parentid`
                 )
                 VALUES
                 (
                     %s,
-                    FROM_UNIXTIME(%s)
+                    FROM_UNIXTIME(%s),
+                    %s
                 )
             """,
             (
                 self.text,
-                int(time.time())
+                int(time.time()),
+                parent
             )
         )
 
@@ -143,13 +145,6 @@ class item():
         conn.commit()
         c.close()
 
-        # Create relationship to parent
-        rel = relationships.relationship()
-        rel.type = relationships.CHILD_OF
-        rel.primary = self.id
-        rel.secondary = parent
-        rel.save()
-
 
 def loadNewest():
     return loadChildren(0)
@@ -169,35 +164,27 @@ def loadChildren(parent):
                 `children`.`count`
             FROM
                 `data`
-            INNER JOIN
-                `relationship`
-             ON `relationship`.`primary` = `data`.`id`
             LEFT JOIN
                 (
                     SELECT
-                        `relationship`.`secondary` AS `id`,
-                        COUNT(`relationship`.`uid`) AS `count`
+                        `data`.`parentid` AS `id`,
+                        COUNT(`data`.`uid`) AS `count`
                     FROM
-                        `relationship`
-                    INNER JOIN
                         `data`
-                     ON `data`.`id` = `relationship`.`primary`
                     WHERE
                         `data`.`archive` = 0
-                    AND `relationship`.`type` = %s
+                    AND `data`.`parentid` = %s
                     GROUP BY
-                        `relationship`.`secondary`
+                        `data`.`parentid`
                 ) AS `children`
              ON `children`.`id` = `data`.`id`
             WHERE
                 `data`.`archive` = 0
-            AND `relationship`.`secondary` = %s
-            AND `relationship`.`type` = %s
+            AND `data`.`parentid` = %s
         """,
         (
-            relationships.CHILD_OF,
             parent,
-            relationships.CHILD_OF,
+            parent
         )
     )
 
@@ -211,59 +198,6 @@ def loadChildren(parent):
 
     c.close()
     return items
-
-
-# Return a count of all children of a parent
-# Parent 0 = the root nodes
-def countChildren(parent):
-    c = conn.cursor()
-    c.execute(
-        """
-            SELECT
-                COUNT(`data`.`id`) AS `count`
-            FROM
-                `data`
-            INNER JOIN
-                `relationship`
-             ON `relationship`.`primary` = `data`.`id`
-            LEFT JOIN
-                (
-                    SELECT
-                        `relationship`.`secondary` AS `id`,
-                        COUNT(`relationship`.`uid`) AS `count`
-                    FROM
-                        `relationship`
-                    INNER JOIN
-                        `data`
-                     ON `data`.`id` = `relationship`.`primary`
-                    WHERE
-                        `data`.`archive` = 0
-                    AND `relationship`.`type` = %s
-                    GROUP BY
-                        `relationship`.`secondary`
-                ) AS `children`
-             ON `children`.`id` = `data`.`id`
-            WHERE
-                `data`.`archive` = 0
-            AND `relationship`.`secondary` = %s
-            AND `relationship`.`type` = %s
-        """,
-        (
-            relationships.CHILD_OF,
-            parent,
-            relationships.CHILD_OF,
-        )
-    )
-
-    count = 0
-
-    if c:
-        for data in c:
-            count = data['count']
-
-    c.close()
-    return count
-
 
 
 # Create json array of items
