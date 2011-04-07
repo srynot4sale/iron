@@ -22,7 +22,6 @@ class item():
     id = None
     text = None
     updated = None
-    current = None
 
     # Meta properties (no corresponding db column)
     count = None
@@ -39,8 +38,6 @@ class item():
                     `data`
                 WHERE
                     `id` = %s
-                AND
-                    `current` = 1
             """,
             (
                 id,
@@ -169,7 +166,6 @@ def loadChildren(parent):
                 `data`.`id`,
                 `data`.`text`,
                 `data`.`updated`,
-                `data`.`current`,
                 `children`.`count`
             FROM
                 `data`
@@ -187,16 +183,14 @@ def loadChildren(parent):
                         `data`
                      ON `data`.`id` = `relationship`.`primary`
                     WHERE
-                        `data`.`current` = 1
-                    AND `data`.`archive` = 0
+                        `data`.`archive` = 0
                     AND `relationship`.`type` = %s
                     GROUP BY
                         `relationship`.`secondary`
                 ) AS `children`
              ON `children`.`id` = `data`.`id`
             WHERE
-                `data`.`current` = 1
-            AND `data`.`archive` = 0
+                `data`.`archive` = 0
             AND `relationship`.`secondary` = %s
             AND `relationship`.`type` = %s
         """,
@@ -243,16 +237,14 @@ def countChildren(parent):
                         `data`
                      ON `data`.`id` = `relationship`.`primary`
                     WHERE
-                        `data`.`current` = 1
-                    AND `data`.`archive` = 0
+                        `data`.`archive` = 0
                     AND `relationship`.`type` = %s
                     GROUP BY
                         `relationship`.`secondary`
                 ) AS `children`
              ON `children`.`id` = `data`.`id`
             WHERE
-                `data`.`current` = 1
-            AND `data`.`archive` = 0
+                `data`.`archive` = 0
             AND `relationship`.`secondary` = %s
             AND `relationship`.`type` = %s
         """,
