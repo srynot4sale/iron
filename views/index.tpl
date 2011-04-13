@@ -18,12 +18,14 @@
 
     <body id="iron">
 
-        <h1><a href="/">Iron</a></h1>
+        <div id="wrapper">
+            <h1><a href="/">iron</a></h1>
 
-        <div id="content">
-        </div>
+            <div id="content">
+            </div>
 
-        <div id="logmessages">
+            <div id="logmessages">
+            </div>
         </div>
 
     </body>

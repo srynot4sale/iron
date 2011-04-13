@@ -257,7 +257,12 @@ iron.render_branch = function(container, data) {
     // Create if doesn't exist
     if (!branch.length) {
         var html = '';
-        html += '<li class="branch" id="b-'+branchid+'" ';
+        var cssclass = 'branch';
+        if (data.children_count) {
+            cssclass += ' has-children';
+        }
+
+        html += '<li class="'+cssclass+'" id="b-'+branchid+'" ';
         html += 'branch-id="'+branchid+'" ';
         html += 'child-count="'+data.children_count+'" ';
         html += 'parent-id="'+data.parent_id+'"></li>';
