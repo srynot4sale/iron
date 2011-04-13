@@ -226,7 +226,8 @@ iron.render_branches = function(parentid, data) {
         {
             items: '> li.branch',
             handle: '> span.content',
-            axis: 'y'
+            axis: 'y',
+            delay: 500
         }
     );
 
