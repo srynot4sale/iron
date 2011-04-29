@@ -6,8 +6,8 @@ body {
 
 body, input {
     color: #666;
-    font-family: Calibri, Verdana, "lucida console", sans-serif;
-    font-size: 16px;
+    font-family: "PT Sans", Calibri, Verdana, "lucida console", sans-serif;
+    font-size: 14px;
 }
 
 a, a:link {
@@ -68,7 +68,7 @@ h1 a {
 
 #content ul.container li.branch span.content span.text {
     color: #666;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 #content ul.container li.has-children > span.content span.text {
