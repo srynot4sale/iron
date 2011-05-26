@@ -295,8 +295,10 @@ iron.render_branch = function(container, data) {
         branch = $(html);
 
         var branchcontent = $('<span class="content"></span>');
+        var branchlinks = $('<span class="links"></span>');
         var branchactions = $('<span class="archive">a</span>');
         branch.append(branchcontent);
+        branch.append(branchlinks);
         branch.append(branchactions);
 
         if ($('> li.add', container).length) {
@@ -326,14 +328,24 @@ iron.render_branch = function(container, data) {
 iron.update_branch = function(branch, data) {
 
     var content = $('> span.content', branch);
+    var links = $('> span.links', branch);
     var actions = $('> span.archive', branch);
 
     // Update branch content
+    var linktext = '';
+    if (data.text) {
+        matches = data.text.match(/(http:\/\/[^ ]+)/g);
+        for (match in matches) {
+            linktext += ' <a target="_blank" href="'+matches[match]+'" title="'+matches[match]+'">^</a>';
+        }
+    }
+
     var text = '<span class="text">'+data.text+'</span>';
     if (data.children_count) {
         text += ' ('+data.children_count+')';
     }
     content.html(text);
+    links.html(linktext);
 
     // Update child count
     branch.attr('child-count', data.children_count);
