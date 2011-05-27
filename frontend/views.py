@@ -50,6 +50,8 @@ def logout(request):
 
 def display_list(request):
 
+    items.setowner(request.user.id)
+
     c = Context({
         'json': items.createjson('0'),
         'loggedin': True,
@@ -61,12 +63,16 @@ def display_list(request):
 
 def return_json_children(request, parentid):
 
+    items.setowner(request.user.id)
+
     json = items.createjson(str(parentid))
 
     return HttpResponse(json)
 
 
 def create_item(request, parentid):
+
+    items.setowner(request.user.id)
 
     item = items.item()
     item.set_data(request.POST)
@@ -79,6 +85,8 @@ def create_item(request, parentid):
 
 
 def archive_item(request, itemid):
+
+    items.setowner(request.user.id)
 
     item = items.item()
     item.load(itemid)

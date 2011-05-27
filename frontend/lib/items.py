@@ -14,6 +14,14 @@ else:
 import time
 from data import conn
 
+
+OWNER_ID = None
+
+def setowner(ownerid):
+    global OWNER_ID
+    OWNER_ID = ownerid
+
+
 class item():
 
     # Database mapped properties
@@ -37,9 +45,12 @@ class item():
                     `data`
                 WHERE
                     `id` = %s
+                AND
+                    `ownerid` = %s
             """,
             (
                 id,
+                OWNER_ID
             )
         );
 
@@ -79,9 +90,12 @@ class item():
                     `archive` = 1
                 WHERE
                     `id` = %s
+                AND
+                    `ownerid` = %s
             """,
             (
                 self.id,
+                OWNER_ID
             )
         )
 
@@ -107,19 +121,22 @@ class item():
                 (
                     `text`,
                     `updated`,
-                    `parentid`
+                    `parentid`,
+                    `ownerid`
                 )
                 VALUES
                 (
                     %s,
                     FROM_UNIXTIME(%s),
+                    %s,
                     %s
                 )
             """,
             (
                 self.text,
                 int(time.time()),
-                parent
+                parent,
+                OWNER_ID
             )
         )
 
@@ -135,10 +152,12 @@ class item():
                     `id` = %s
                 WHERE
                     `uid` = %s
+                AND `ownerid` = %s
             """,
             (
                 self.id,
-                self.uid
+                self.uid,
+                OWNER_ID
             )
         )
 
@@ -152,6 +171,7 @@ def loadNewest():
 
 # Return a list of all children of a parent
 # Parent 0 = the root nodes
+
 def loadChildren(parent):
     c = conn.cursor()
     c.execute(
@@ -174,6 +194,7 @@ def loadChildren(parent):
                     WHERE
                         `data`.`archive` = 0
                     AND `data`.`parentid` = %s
+                    AND `data`.`ownerid` = %s
                     GROUP BY
                         `data`.`parentid`
                 ) AS `children`
@@ -181,10 +202,13 @@ def loadChildren(parent):
             WHERE
                 `data`.`archive` = 0
             AND `data`.`parentid` = %s
+            AND `data`.`ownerid` = %s
         """,
         (
             parent,
-            parent
+            OWNER_ID,
+            parent,
+            OWNER_ID
         )
     )
 

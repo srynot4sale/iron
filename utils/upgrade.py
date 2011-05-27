@@ -162,4 +162,37 @@ if version < upgradeto:
 
     set_current_version(upgradeto)
 
+
+upgradeto = 2011052700
+if version < upgradeto:
+
+    print 'Adding "ownerid" column to data table'
+
+    mc.execute(
+        """
+            ALTER TABLE  `data` ADD  `ownerid` INT UNSIGNED NOT NULL AFTER  `id` ,
+            ADD INDEX (  `ownerid` )
+        """
+    )
+
+    set_current_version(upgradeto)
+
+
+upgradeto = 2011052701
+if version < upgradeto:
+
+    print 'Update "ownerid" to be 2 for existing data'
+
+    mc.execute(
+        """
+            UPDATE
+                `data`
+            SET
+                `ownerid` = 2
+        """
+    )
+
+    set_current_version(upgradeto)
+
+
 mc.close()
