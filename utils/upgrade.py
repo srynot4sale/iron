@@ -2,6 +2,7 @@ import sys
 sys.path = ['.','..'] + sys.path
 
 from lib import data
+import frontend.lib.items as items
 
 print 'Create config table in MySQL'
 mc = data.conn.cursor()
@@ -191,6 +192,53 @@ if version < upgradeto:
                 `ownerid` = 2
         """
     )
+
+    set_current_version(upgradeto)
+
+
+upgradeto = 2011052702
+if version < upgradeto:
+
+    print 'Adding "sort" column to data table'
+
+    mc.execute(
+        """
+            ALTER TABLE  `data` ADD  `sort` INT UNSIGNED NOT NULL AFTER  `text` ,
+            ADD INDEX (  `sort` )
+        """
+    )
+
+    set_current_version(upgradeto)
+
+
+upgradeto = 2011052709
+if version < upgradeto:
+
+    items.setowner(2)
+    print 'Update "sort" column for existing data'
+
+    new = items.item()
+    new.id = 0
+    new.sort_children()
+
+    mc.execute(
+        """
+            SELECT
+                *
+            FROM
+                `data`
+            WHERE
+                `data`.`archive` = 0
+            ORDER BY
+                `id` ASC
+        """
+    )
+
+    for data in mc:
+        print data['id']
+        new = items.item()
+        new.set_data(data)
+        new.sort_children()
 
     set_current_version(upgradeto)
 

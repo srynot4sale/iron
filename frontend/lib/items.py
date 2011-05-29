@@ -29,6 +29,7 @@ class item():
     id = None
     text = None
     updated = None
+    sort = None
 
     # Meta properties (no corresponding db column)
     count = None
@@ -79,6 +80,45 @@ class item():
         return len(loadChildren(self.id))
 
 
+    # Sort all children
+    def sort_children(self):
+        # Load all children in order
+        children = loadChildren(self.id)
+
+        print 'c'
+        print len(children)
+        c = conn.cursor()
+
+        # Loop through looking for duplicates/spaces
+        lastsort = 0
+        for child in children:
+            newsort = lastsort + 1
+            if child.sort != newsort:
+                print 'u'
+                # Update to be correct sort
+                c.execute(
+                    """
+                        UPDATE
+                            `data`
+                        SET
+                            `sort` = %s
+                        WHERE
+                            `id` = %s
+                        AND `ownerid` = %s
+                    """,
+                    (
+                        newsort,
+                        child.id,
+                        OWNER_ID
+                    )
+                )
+
+            lastsort = newsort
+
+        conn.commit()
+        c.close()
+
+
     # Archive this item
     def set_archived(self):
         c = conn.cursor()
@@ -90,8 +130,7 @@ class item():
                     `archive` = 1
                 WHERE
                     `id` = %s
-                AND
-                    `ownerid` = %s
+                AND `ownerid` = %s
             """,
             (
                 self.id,
@@ -181,6 +220,7 @@ def loadChildren(parent):
                 `data`.`id`,
                 `data`.`text`,
                 `data`.`updated`,
+                `data`.`sort`,
                 `children`.`count`
             FROM
                 `data`
@@ -203,6 +243,9 @@ def loadChildren(parent):
                 `data`.`archive` = 0
             AND `data`.`parentid` = %s
             AND `data`.`ownerid` = %s
+            ORDER BY
+                `id` ASC,
+                `sort` ASC
         """,
         (
             parent,
