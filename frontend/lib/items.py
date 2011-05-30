@@ -86,8 +86,6 @@ class item():
         # Load all children in order
         children = loadChildren(self.id)
 
-        print 'c'
-        print len(children)
         c = conn.cursor()
 
         # Loop through looking for duplicates/spaces
@@ -95,7 +93,6 @@ class item():
         for child in children:
             newsort = lastsort + 1
             if child.sort != newsort:
-                print 'u'
                 # Update to be correct sort
                 c.execute(
                     """
@@ -113,10 +110,10 @@ class item():
                         OWNER_ID
                     )
                 )
+                conn.commit()
 
             lastsort = newsort
 
-        conn.commit()
         c.close()
 
 
@@ -183,19 +180,41 @@ class item():
         self.uid = c.lastrowid
         self.id = self.uid
 
+        # Get max sort for previous items
+        c.execute(
+            """
+                SELECT
+                    MAX(`sort`) + 1 AS `sort`
+                FROM
+                    `data`
+                WHERE
+                    `parentid` = %s
+                AND `ownerid` = %s
+            """,
+            (
+                parent,
+                OWNER_ID
+            )
+        )
+        result = c.fetchone()
+        newsort = result['sort']
+
+
         # Update the id
         c.execute(
             """
                 UPDATE
                     `data`
                 SET
-                    `id` = %s
+                    `id` = %s,
+                    `sort` = %s
                 WHERE
                     `uid` = %s
                 AND `ownerid` = %s
             """,
             (
                 self.id,
+                newsort,
                 self.uid,
                 OWNER_ID
             )
@@ -203,6 +222,11 @@ class item():
 
         conn.commit()
         c.close()
+
+        # Resort parent
+        p = item()
+        p.id = parent
+        p.sort_children()
 
 
 def loadNewest():
