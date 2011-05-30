@@ -243,4 +243,58 @@ if version < upgradeto:
     set_current_version(upgradeto)
 
 
+upgradeto = 2011052900
+if version < upgradeto:
+
+    print 'Turn off auto update for "updated" column in data table'
+
+    mc.execute(
+        """
+            ALTER TABLE  `data` CHANGE  `updated`  `updated` TIMESTAMP NULL DEFAULT NULL
+        """
+    )
+
+    set_current_version(upgradeto)
+
+
+upgradeto = 2011052901
+if version < upgradeto:
+
+    print 'Add "created" column to data table'
+
+    mc.execute(
+        """
+            ALTER TABLE  `data` ADD  `created` TIMESTAMP NULL DEFAULT NULL AFTER  `sort`
+        """
+    )
+
+    set_current_version(upgradeto)
+
+
+upgradeto = 2011052902
+if version < upgradeto:
+
+    print 'Swap "created" and "updated" column values in data table'
+
+    mc.execute(
+        """
+            ALTER TABLE  `data` CHANGE  `created` `createdold` TIMESTAMP NULL DEFAULT NULL
+        """
+    )
+
+    mc.execute(
+        """
+            ALTER TABLE  `data` CHANGE  `updated` `created` TIMESTAMP NULL DEFAULT NULL
+        """
+    )
+
+    mc.execute(
+        """
+            ALTER TABLE  `data` CHANGE  `createdold` `updated` TIMESTAMP NULL DEFAULT NULL
+        """
+    )
+
+    set_current_version(upgradeto)
+
+
 mc.close()

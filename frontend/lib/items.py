@@ -28,6 +28,7 @@ class item():
     uid = None
     id = None
     text = None
+    created = None
     updated = None
     sort = None
 
@@ -159,7 +160,7 @@ class item():
                     `data`
                 (
                     `text`,
-                    `updated`,
+                    `created`,
                     `parentid`,
                     `ownerid`
                 )
@@ -219,7 +220,7 @@ def loadChildren(parent):
                 `data`.`uid`,
                 `data`.`id`,
                 `data`.`text`,
-                `data`.`updated`,
+                `data`.`created`,
                 `data`.`sort`,
                 `children`.`count`
             FROM
