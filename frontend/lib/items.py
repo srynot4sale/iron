@@ -22,18 +22,21 @@ def setowner(ownerid):
     OWNER_ID = ownerid
 
 
-class item():
+class item(object):
 
-    # Database mapped properties
-    uid = None
-    id = None
-    text = None
-    created = None
-    updated = None
-    sort = None
+    # Constructor
+    def __init__(self):
+        # Database mapped properties
+        self.uid = None
+        self.id = None
+        self.text = None
+        self.ownerid = None
+        self.created = None
+        self.updated = None
+        self.sort = None
 
-    # Meta properties (no corresponding db column)
-    count = None
+        # Meta properties (no corresponding db column)
+        self.count = None
 
 
     # Load from database
