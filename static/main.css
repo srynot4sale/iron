@@ -30,10 +30,21 @@ a, a:link {
 h1 {
     margin: 0 0 10px;
     padding: 0;
+    float: left;
 }
 
 h1 a {
     color: #333;
+}
+
+#menu {
+    float: right;
+}
+
+#menu li {
+    display: inline-block;
+    list-style: none;
+    padding-left: 10px;
 }
 
 #content {
@@ -116,8 +127,6 @@ a.external {
     right: 2px;
     width: 20%;
     top: 2px;
-    bottom: 2px;
-    overflow: auto;
 }
 
 #logmessages #iron-logging-toggle {
