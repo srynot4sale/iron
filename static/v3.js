@@ -67,6 +67,9 @@ iron.logging_toggle = function() {
     if (iron.logging_enabled) {
         iron.logging_enabled = false;
         button.val('Enable logging');
+
+        // Clear any existing log messages
+        $('#logmessages div').remove();
     }
     else {
         iron.logging_enabled = true;
