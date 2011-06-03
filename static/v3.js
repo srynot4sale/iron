@@ -144,6 +144,35 @@ iron.render_branches = function(parentid, data) {
         }
 
         iron.logger('Creating container');
+
+        // Make sortable
+        container.sortable(
+            {
+                items: '> li.branch',
+                handle: '> span.content',
+                axis: 'y',
+                delay: 500
+            }
+        );
+
+        // Create sort handler
+        container.bind('sortupdate', function(event, ui) {
+            var branch = $(ui.item);
+
+            // Only run this once (for the direct parent)
+            if (branch.attr('parent-id') != parentid) {
+                return true;
+            }
+
+            var moveto = branch.prev().attr('branch-id');
+            if (!moveto) {
+                moveto = 0;
+            }
+
+            iron.logger('Move branch #'+branch.attr('branch-id')+' to '+moveto)
+
+            iron.move_branch(branch.attr('branch-id'), moveto)
+        });
     }
 
     // Populate branches
@@ -249,21 +278,6 @@ iron.render_branches = function(parentid, data) {
 
     // Show branches
     container.show();
-
-    // Make sortable
-    container.sortable(
-        {
-            items: '> li.branch',
-            handle: '> span.content',
-            axis: 'y',
-            delay: 500
-        }
-    );
-
-    // Create sort handler
-    container.bind('sortstart', function(event, ui) {
-        container.addClass('iron-sorting-started');
-    });
 
     iron.logger('Render child branches of '+parentid+' complete');
 }
@@ -452,6 +466,32 @@ iron.save_branch = function(parentid, content) {
         function() {
             iron.load_branch(parentid);
         }
+    );
+}
+
+
+/**
+ * Update branch sort order
+ *
+ * @param   integer branchid to move
+ * @param   integer moveid  ID of branch to move after (or 0 to go to the top)
+ */
+iron.move_branch = function(branchid, moveid) {
+
+    iron.logger('Moving branch '+branchid);
+
+    // Generate url
+    var url = '/move/'+ branchid;
+
+    // Generate data
+    var data = {
+        moveto: moveid
+    }
+
+    // Save then update branch
+    $.post(
+        url,
+        data
     );
 }
 

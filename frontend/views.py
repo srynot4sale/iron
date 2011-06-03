@@ -81,7 +81,7 @@ def create_item(request, parentid):
     if item.validate():
         item.save(parentid)
 
-    return HttpResponseRedirect('/')
+    return HttpResponse('')
 
 
 def archive_item(request, itemid):
@@ -92,4 +92,22 @@ def archive_item(request, itemid):
     item.load(itemid)
     item.set_archived()
 
-    return HttpResponseRedirect('/')
+    return HttpResponse('')
+
+
+def move_item(request, itemid):
+
+    items.setowner(request.user.id)
+    item = items.item()
+    item.load(itemid)
+
+    moveid = request.POST['moveto']
+    moveto = 1
+    if moveid != '0':
+        move = items.item()
+        move.load(moveid)
+        moveto = move.sort + 1
+
+    item.move(moveto)
+
+    return HttpResponse('')

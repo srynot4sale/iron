@@ -31,6 +31,7 @@ class item(object):
         self.id = None
         self.text = None
         self.ownerid = None
+        self.parentid = None
         self.created = None
         self.updated = None
         self.sort = None
@@ -59,12 +60,13 @@ class item(object):
             )
         );
 
-        self.set_data(c.fetchone())
+        data = c.fetchone()
+        if not data:
+            raise Exception('item %s does not exist' % id)
+
+        self.set_data(data)
 
         c.close()
-
-        if self.uid < 1:
-            raise Exception('item does not exist')
 
 
     # Update data from dict
@@ -102,13 +104,15 @@ class item(object):
                         UPDATE
                             `data`
                         SET
-                            `sort` = %s
+                            `sort` = %s,
+                            `updated` = FROM_UNIXTIME(%s)
                         WHERE
                             `id` = %s
                         AND `ownerid` = %s
                     """,
                     (
                         newsort,
+                        int(time.time()),
                         child.id,
                         OWNER_ID
                     )
@@ -143,6 +147,36 @@ class item(object):
         c.close()
 
 
+    # Move this item
+    def move(self, moveto):
+        c = conn.cursor()
+        c.execute(
+            """
+                UPDATE
+                    `data`
+                SET
+                    `sort` = %s,
+                    `updated` = FROM_UNIXTIME(%s)
+                WHERE
+                    `id` = %s
+                AND `ownerid` = %s
+            """,
+            (
+                moveto,
+                int(time.time()),
+                self.id,
+                OWNER_ID
+            )
+        )
+
+        conn.commit()
+        c.close()
+
+        parent = item()
+        parent.id = self.parentid
+        parent.sort_children()
+
+
     # Validate item
     def validate(self):
         if len(self.text):
@@ -161,6 +195,7 @@ class item(object):
                 (
                     `text`,
                     `created`,
+                    `updated`,
                     `parentid`,
                     `ownerid`
                 )
@@ -168,12 +203,14 @@ class item(object):
                 (
                     %s,
                     FROM_UNIXTIME(%s),
+                    FROM_UNIXTIME(%s),
                     %s,
                     %s
                 )
             """,
             (
                 self.text,
+                int(time.time()),
                 int(time.time()),
                 parent,
                 OWNER_ID
@@ -248,6 +285,7 @@ def loadChildren(parent):
                 `data`.`id`,
                 `data`.`text`,
                 `data`.`created`,
+                `data`.`updated`,
                 `data`.`sort`,
                 `children`.`count`
             FROM
@@ -272,8 +310,8 @@ def loadChildren(parent):
             AND `data`.`parentid` = %s
             AND `data`.`ownerid` = %s
             ORDER BY
-                `id` ASC,
-                `sort` ASC
+                `sort` ASC,
+                `updated` DESC
         """,
         (
             parent,

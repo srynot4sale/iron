@@ -20,6 +20,9 @@ urlpatterns = patterns('',
     # Archive item
     url(r'^archive/(\d+)$', 'frontend.views.archive_item'),
 
+    # Move item
+    url(r'^move/(\d+)$', 'frontend.views.move_item'),
+
     # url(r'^frontend/', include('frontend.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
