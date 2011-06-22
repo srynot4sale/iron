@@ -155,6 +155,12 @@ iron.render_branches = function(parentid, data) {
             }
         );
 
+        // Create sort start handler
+        // This class is required to prevent the click handler firing
+        container.bind( "sortstart", function(event, ui) {
+            container.addClass('iron-sorting-started');
+        });
+
         // Create sort handler
         container.bind('sortupdate', function(event, ui) {
             var branch = $(ui.item);
