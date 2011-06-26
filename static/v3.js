@@ -372,6 +372,12 @@ iron.update_branch = function(branch, data) {
 
     // Update child count
     branch.attr('child-count', data.children_count);
+    if (data.children_count) {
+        branch.addClass('has-children');
+    }
+    else {
+        branch.removeClass('has-children');
+    }
 
     // Hide actions if has children
     if (data.children_count) {
