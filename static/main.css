@@ -155,30 +155,53 @@ body.smartphone #logmessages {
     display: none;
 }
 
+body.smartphone #wrapper {
+    border: 0;
+    margin: 0;
+    padding: 10px;
+    border-radius: 0;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    box-shadow: 0px;
+    -moz-box-shadow: 0px;
+    -webkit-box-shadow: 0px;
+    overflow: auto;
+}
+
+body.smartphone h1 span {
+    display: none;
+}
+
 body.smartphone #content ul.container {
     margin-left: 0;
+    border-left: 0px !important;
 }
 
 body.smartphone #content ul.container li {
     border-top: 2px solid #ccc;
     clear: both;
     overflow: auto;
-    padding-left: 10px;
-    padding-right: 0;
 }
 
 body.smartphone #content ul.container li.branch span.content {
     display: block;
-    padding: 10px 20px;
+    padding: 10px 0px;
     float: left;
+    width: 100%;
 }
 
 body.smartphone #content ul.container li.branch span.archive {
     float: right;
-    padding: 10px 20px;
+    padding: 10px 0px;
     background-color: #efefef;
+    font-size: 150%;
+    text-align: center;
+    width: 40px;
 }
 
 body.smartphone #content ul.container li.add {
-    padding: 10px 30px;
+    display: block;
+    padding: 10px 0px;
+    float: left;
+    width: 100%;
 }
