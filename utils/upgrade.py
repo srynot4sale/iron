@@ -211,7 +211,7 @@ if version < upgradeto:
     set_current_version(upgradeto)
 
 
-upgradeto = 2011052900
+upgradeto = 2011052800
 if version < upgradeto:
 
     print 'Turn off auto update for "updated" column in data table'
@@ -225,7 +225,7 @@ if version < upgradeto:
     set_current_version(upgradeto)
 
 
-upgradeto = 2011052901
+upgradeto = 2011052801
 if version < upgradeto:
 
     print 'Add "created" column to data table'
@@ -239,7 +239,7 @@ if version < upgradeto:
     set_current_version(upgradeto)
 
 
-upgradeto = 2011052902
+upgradeto = 2011052802
 if version < upgradeto:
 
     print 'Swap "created" and "updated" column values in data table'
@@ -265,7 +265,7 @@ if version < upgradeto:
     set_current_version(upgradeto)
 
 
-upgradeto = 2011052903
+upgradeto = 2011052803
 if version < upgradeto:
 
     items.setowner(2)
