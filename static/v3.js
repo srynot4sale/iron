@@ -411,7 +411,7 @@ iron.attach_branch_triggers = function(branch) {
     $('span.archive', branch).click(function() {
 
         iron.logger('Archive branch '+branchid);
-        $.post('/archive/'+branchid);
+        $.post('/archive/'+branchid, {'branchid': branchid});
 
         // Remove from display
         branch.remove();
