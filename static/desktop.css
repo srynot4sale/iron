@@ -110,7 +110,7 @@ h1 a {
 
 #content ul.container li.loading-progress > span.links,
 #content ul.container li.loading-progress > span.archive {
-    display: none;
+    visibility: hidden;
 }
 
 #content ul.container li ul.container {
@@ -136,10 +136,19 @@ h1 a {
 }
 
 #content ul.container li.branch span.archive {
+    display: inline-block;
     color: #F16C32;
     padding: 0 5px;
-    margin: 0 2px;
+    margin: 0 2px 0 5px;
     cursor: pointer;
+    background: url('archive.png') no-repeat scroll center center transparent;
+    text-indent: -9999px;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+#content ul.container li.branch:hover > span.archive {
+    visibility: visible;
 }
 
 #content ul.container li.add {
