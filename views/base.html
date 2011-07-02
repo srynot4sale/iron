@@ -23,18 +23,20 @@
     <body id="iron-frontend">
 
         <div id="wrapper">
-            <h1>iron<span> - brain management</span></h1>
+            <div id="header">
+                <h1>iron<span> - brain management</span></h1>
 
-            <ul id="menu">
-                {% if loggedin %}
-                    <li>
-                        Logged in as {{ username }}
-                    </li>
-                    <li>
-                        <a href="/logout">Logout</a>
-                    </li>
-                {% endif %}
-            </ul>
+                <ul id="menu">
+                    {% if loggedin %}
+                        <li>
+                            Logged in as {{ username }}
+                        </li>
+                        <li>
+                            <a href="/logout">Log out</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
 
             <div id="content">
                 {% block content %}{% endblock %}
