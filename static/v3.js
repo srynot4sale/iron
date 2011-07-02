@@ -515,12 +515,51 @@ iron.move_branch = function(branchid, moveid) {
  */
 iron.load_branch = function(branchid) {
 
-    iron.logger('Requesting branch '+branchid);
+    // Add loading icon to branch
+    var branch = iron.get_branch(branchid);
+    branch.addClass('loading-progress');
 
-    $.getJSON('/json/'+branchid, function(data) {
-        iron.logger('Retrieved branch '+branchid);
+    // Success callback (renders branch and removes loading icon)
+    var load_branch_success = function(data) {
+        branch.removeClass('loading-progress');
         iron.render_branches(branchid, data);
-    });
+    };
+
+    iron.api.getJSON(
+        'Load branch '+branchid,
+        '/json/'+branchid,
+        load_branch_success
+    );
+
+}
+
+
+/**
+ * Get branch object
+ *
+ * @param   integer branchid
+ */
+iron.get_branch = function(branchid) {
+    return $('li#b-'+branchid);
+}
+
+
+/**
+ * API layer
+ */
+iron.api = function() {}
+
+iron.api.getJSON = function(message, url, callback_success, callback_failure) {
+
+    iron.logger(message + ' (request)');
+
+    $.getJSON(
+        url,
+        function(data) {
+            iron.logger(message + ' (success)');
+            callback_success(data);
+        }
+    );
 }
 
 
