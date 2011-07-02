@@ -90,16 +90,19 @@ h1 span {
 }
 
 #content ul.container li.branch span.archive {
+    display: inline-block;
     padding: 0;
-    background-color: #efefef;
     text-align: center;
     width: 40px;
     position: absolute;
-    top: 0;
+    top: 7px;
     right: 0;
     vertical-align: center;
     color: #F16C32;
     cursor: pointer;
+    background: url('archive.png') no-repeat scroll center center transparent;
+    text-indent: -9999px;
+    overflow: hidden;
 }
 
 #content ul.container li.add {
