@@ -143,8 +143,6 @@ iron.render_branches = function(parentid, data) {
             $('div#content').append(container);
         }
 
-        iron.logger('Creating container');
-
         // Make sortable
         container.sortable(
             {
@@ -230,7 +228,6 @@ iron.render_branches = function(parentid, data) {
         container.append(addform);
 
         $('input', addform).focus(function() {
-            iron.logger('Add form gains focus');
             $(this).addClass('hasinput');
 
             if ($(this).val() == 'Add new') {
@@ -239,8 +236,6 @@ iron.render_branches = function(parentid, data) {
         });
 
         $('input', addform).blur(function() {
-            iron.logger('Add form blurs');
-
             if ($(this).val() == '') {
                 $(this).removeClass('hasinput');
                 $(this).val('Add new');
@@ -328,15 +323,13 @@ iron.render_branch = function(container, data) {
             container.append(branch);
         }
 
-        iron.logger('Creating branch');
-
         // Attach triggers
         iron.attach_branch_triggers(branch);
     }
 
     iron.update_branch(branch, data);
 
-    iron.logger('Render branch '+branchid+' complete');
+    iron.logger('Render branch '+branchid);
 }
 
 
@@ -396,8 +389,6 @@ iron.attach_branch_triggers = function(branch) {
 
     // Branch ID
     var branchid = branch.attr('branch-id');
-
-    iron.logger('Attaching events to branch '+branchid);
 
     // Create "toggle" click event on branch content
     $('span.content', branch).click(function() {
