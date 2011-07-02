@@ -1,0 +1,125 @@
+/**
+ * Smartphone specific stylesheets
+ */
+body {
+    background-color: #fff;
+    color: #666;
+    padding: 0;
+    margin: 0;
+}
+
+a, a:link {
+    text-decoration: none;
+    color: #F16C32;
+}
+
+#logmessages {
+    display: none;
+}
+
+#wrapper {
+    border: 0;
+    margin: 0;
+    padding: 10px;
+    overflow: auto;
+}
+
+h1 {
+    margin: 0 0 10px;
+    padding: 0;
+    float: left;
+}
+
+h1 a {
+    color: #333;
+}
+
+h1 span {
+    display: none;
+}
+
+#menu {
+    float: right;
+    padding: 15px 0 0;
+    margin: 0;
+}
+
+#menu li {
+    display: inline-block;
+    list-style: none;
+    padding-left: 10px;
+}
+
+#content ul.container {
+    margin: 5px 0 0;
+    padding: 0;
+    border-left: 0px !important;
+    list-style-type: none;
+}
+
+#content ul.container li {
+    border-top: 2px solid #ccc;
+    clear: both;
+    overflow: auto;
+    position: relative;
+}
+
+#content ul.container li.branch span.content {
+    padding: 10px 0px;
+    display: block;
+    cursor: pointer;
+    color: #999;
+    margin-right: 50px;
+}
+
+#content ul.container li.has-children > span.content {
+    margin-right: 0;
+}
+
+#content ul.container li.branch span.content span.text {
+    color: #666;
+    font-size: 14px;
+}
+
+#content ul.container li.branch li {
+    margin-left: 10px;
+}
+
+#content ul.container li.has-children > span.content span.text {
+    color: #333;
+}
+
+#content ul.container li.branch span.archive {
+    padding: 0;
+    background-color: #efefef;
+    text-align: center;
+    width: 40px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    vertical-align: center;
+    color: #F16C32;
+    cursor: pointer;
+}
+
+#content ul.container li.add {
+    display: block;
+    padding: 10px 0px;
+    overflow: hidden;
+}
+
+#content ul.container li.add input {
+    width: 100%;
+    border: none;
+    font-style: italic;
+    background: url('plus.png') no-repeat scroll 2px 2px transparent;
+    color: #999;
+    padding: 2px 0 2px 20px;
+}
+
+#content ul.container li.add input.hasinput {
+    font-style: normal;
+    border: 1px solid #ccc;
+    background: none;
+    padding: 2px 0;
+}
