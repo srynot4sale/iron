@@ -405,14 +405,22 @@ iron.attach_branch_triggers = function(branch) {
     // Create "archive" click event on branch archive
     $('span.archive', branch).click(function() {
 
-        iron.logger('Archive branch '+branchid);
-        $.post('/archive/'+branchid, {'branchid': branchid});
+        // Add loading icon to branch and "archiving" message
+        $('> span.content span.text', branch).append(' <i>(archiving...)</i>');
+        branch.addClass('loading-progress');
 
-        // Remove from display
-        branch.remove();
+        // Success callback (removes branch)
+        var archive_branch_success = function() {
+            branch.remove();
+        };
 
-        // Reload branch
-        iron.load_branch(branch.attr('parent-id'));
+        // Save then update branch
+        iron.api.post(
+            'Archive branch '+branchid,
+            '/archive/'+branchid,
+            { branchid: branchid },
+            archive_branch_success
+        );
     });
 }
 
