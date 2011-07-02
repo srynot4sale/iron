@@ -175,8 +175,6 @@ iron.render_branches = function(parentid, data) {
                 moveto = 0;
             }
 
-            iron.logger('Move branch #'+branch.attr('branch-id')+' to '+moveto)
-
             iron.move_branch(branch.attr('branch-id'), moveto)
         });
     }
@@ -461,23 +459,22 @@ iron.toggle_branch = function(branchid) {
  */
 iron.save_branch = function(parentid, content) {
 
-    iron.logger('Saving child branch of '+parentid);
+    // Add loading icon to all new branches waiting for response
+    var branch = $('li[branch-id="0"]');
+    branch.addClass('loading-progress');
 
-    // Generate url
-    var url = '/new/'+ parentid;
-
-    // Generate data
-    var data = {
-        text: content
-    }
+    // Success callback (removes loading icon)
+    var save_branch_success = function() {
+        branch.removeClass('loading-progress');
+        iron.load_branch(parentid);
+    };
 
     // Save then update branch
-    $.post(
-        url,
-        data,
-        function() {
-            iron.load_branch(parentid);
-        }
+    iron.api.post(
+        'Saving child branch of '+parentid,
+        '/new/'+parentid,
+        { text: content },
+        save_branch_success
     );
 }
 
@@ -490,20 +487,21 @@ iron.save_branch = function(parentid, content) {
  */
 iron.move_branch = function(branchid, moveid) {
 
-    iron.logger('Moving branch '+branchid);
+    // Add loading icon to branch
+    var branch = iron.get_branch(branchid);
+    branch.addClass('loading-progress');
 
-    // Generate url
-    var url = '/move/'+ branchid;
-
-    // Generate data
-    var data = {
-        moveto: moveid
-    }
+    // Success callback (removes loading icon)
+    var move_branch_success = function() {
+        branch.removeClass('loading-progress');
+    };
 
     // Save then update branch
-    $.post(
-        url,
-        data
+    iron.api.post(
+        'Move branch '+branchid+' to '+moveid,
+        '/move/'+branchid,
+        { moveto: moveid },
+        move_branch_success
     );
 }
 
@@ -555,13 +553,26 @@ iron.api.getJSON = function(message, url, callback_success, callback_failure) {
 
     $.getJSON(
         url,
-        function(data) {
+        function(response) {
             iron.logger(message + ' (success)');
-            callback_success(data);
+            callback_success(response);
         }
     );
 }
 
+iron.api.post = function(message, url, data, callback_success, callback_failure) {
+
+    iron.logger(message + ' (request)');
+
+    $.post(
+        url,
+        data,
+        function(response) {
+            iron.logger(message + ' (success)');
+            callback_success(response);
+        }
+    );
+}
 
 /**
  * Run on start up
