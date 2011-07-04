@@ -105,6 +105,17 @@ h1 span {
     overflow: hidden;
 }
 
+#content ul.container li.loading-progress > span.content {
+    background: url('loading.gif') no-repeat scroll center right transparent;
+    margin-right: 10px;
+    padding-right: 40px;
+}
+
+#content ul.container li.loading-progress > span.links,
+#content ul.container li.loading-progress > span.archive {
+    display: none;
+}
+
 #content ul.container li.add {
     display: block;
     padding: 10px 0px;
