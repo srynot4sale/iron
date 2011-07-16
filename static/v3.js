@@ -153,12 +153,6 @@ iron.render_branches = function(parentid, data) {
             }
         );
 
-        // Create sort start handler
-        // This class is required to prevent the click handler firing
-        container.bind( "sortstart", function(event, ui) {
-            container.addClass('iron-sorting-started');
-        });
-
         // Create sort handler
         container.bind('sortupdate', function(event, ui) {
             var branch = $(ui.item);
@@ -394,12 +388,7 @@ iron.attach_branch_triggers = function(branch) {
     $('span.content', branch).click(function() {
         // Check the branch is not being dragged
         var container = branch.parent('ul.container');
-        if (container.hasClass('iron-sorting-started')) {
-            container.removeClass('iron-sorting-started');
-        }
-        else {
-            iron.toggle_branch(branchid);
-        }
+        iron.toggle_branch(branchid);
     });
 
     // Create "archive" click event on branch archive
