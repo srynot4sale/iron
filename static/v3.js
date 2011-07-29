@@ -342,7 +342,7 @@ iron.update_branch = function(branch, data) {
     // Update branch content
     var linktext = '';
     if (data.text) {
-        matches = data.text.match(/(http:\/\/[^ ]+)/g);
+        matches = data.text.match(/(https?:\/\/[^ ]+)/g);
         for (match in matches) {
             linktext += ' <a target="_blank" href="'+matches[match]+'" title="'+matches[match]+'">^</a>';
         }
