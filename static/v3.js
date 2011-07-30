@@ -305,10 +305,10 @@ iron.render_branch = function(container, data) {
         branch = $(html);
 
         var branchcontent = $('<span class="content"></span>');
-        var branchlinks = $('<span class="links"></span>');
+        var branchtoggle = $('<span class="toggle"></span>');
         var branchactions = $('<span class="archive">a</span>');
+        branch.append(branchtoggle);
         branch.append(branchcontent);
-        branch.append(branchlinks);
         branch.append(branchactions);
 
         if ($('> li.add', container).length) {
@@ -336,16 +336,12 @@ iron.render_branch = function(container, data) {
 iron.update_branch = function(branch, data) {
 
     var content = $('> span.content', branch);
-    var links = $('> span.links', branch);
     var actions = $('> span.archive', branch);
 
     // Update branch content
-    var linktext = '';
     if (data.text) {
-        matches = data.text.match(/(https?:\/\/[^ ]+)/g);
-        for (match in matches) {
-            linktext += ' <a target="_blank" href="'+matches[match]+'" title="'+matches[match]+'">^</a>';
-        }
+        // Surround all links with correct html
+        data.text = data.text.replace(/(https?:\/\/[^ ]+)/g, "<a href=\"$1\">$1</a>");
     }
 
     var text = '<span class="text">'+data.text+'</span>';
@@ -353,7 +349,6 @@ iron.update_branch = function(branch, data) {
         text += ' ('+data.children_count+')';
     }
     content.html(text);
-    links.html(linktext);
 
     // Update child count
     branch.attr('child-count', data.children_count);
@@ -384,8 +379,8 @@ iron.attach_branch_triggers = function(branch) {
     // Branch ID
     var branchid = branch.attr('branch-id');
 
-    // Create "toggle" click event on branch content
-    $('span.content', branch).click(function() {
+    // Create "toggle" click event
+    $('span.toggle', branch).click(function() {
         // Check the branch is not being dragged
         var container = branch.parent('ul.container');
         iron.toggle_branch(branchid);
@@ -424,11 +419,14 @@ iron.attach_branch_triggers = function(branch) {
  */
 iron.toggle_branch = function(branchid) {
 
+    var branch = $('li#b-'+branchid);
+
     // Check if child branches are visible
-    var children = $('li#b-'+branchid+' > ul.container');
+    var children = $('> ul.container', branch);
 
     // If visible, hide
     if (children.is(':visible')) {
+        branch.removeClass('expanded');
         children.hide();
 
         iron.logger('Hide children of branch '+branchid);
@@ -507,6 +505,7 @@ iron.load_branch = function(branchid) {
     // Add loading icon to branch
     var branch = iron.get_branch(branchid);
     branch.addClass('loading-progress');
+    branch.addClass('expanded');
 
     // Success callback (renders branch and removes loading icon)
     var load_branch_success = function(data) {

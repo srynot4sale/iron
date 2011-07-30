@@ -109,21 +109,37 @@ h1 a {
     padding-right: 25px;
 }
 
-#content ul.container li.loading-progress > span.links,
 #content ul.container li.loading-progress > span.archive {
     visibility: hidden;
 }
 
 #content ul.container li ul.container {
-    border-left: 5px solid #ccc;
+    margin-left: 2px;
+    border-left: 4px solid #ccc;
 }
 
 #content ul.container li ul.container li {
     padding-left: 10px;
 }
 
-#content ul.container li.branch span.content {
+#content ul.container li.branch span.toggle {
     cursor: pointer;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+}
+
+#content ul.container li.has-children > span.toggle,
+#content ul.container li.branch:hover > span.toggle {
+    background: url('collapsed.png') no-repeat scroll 0px 5px transparent;
+}
+
+#content ul.container li.expanded > span.toggle,
+#content ul.container li.expanded:hover > span.toggle {
+    background: url('expanded.png') no-repeat scroll 0px 5px transparent;
+}
+
+#content ul.container li.branch span.content {
     color: #999;
 }
 
@@ -153,11 +169,11 @@ h1 a {
 }
 
 #content ul.container li.add {
-    padding: 3px 0 0;
+    padding: 3px 0 0 12px;
 }
 
 #content ul.container li ul.container li.add {
-    padding: 3px 0 0 10px;
+    padding: 3px 0 0 22px;
 }
 
 #content ul.container li.add input {
