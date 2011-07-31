@@ -130,12 +130,14 @@ h1 a {
 }
 
 #content ul.container li.has-children > span.toggle,
-#content ul.container li.branch:hover > span.toggle {
+#content ul.container li.branch:hover > span.toggle,
+body.modkey #content ul.container li.branch > span.toggle {
     background: url('collapsed.png') no-repeat scroll 0px 5px transparent;
 }
 
 #content ul.container li.expanded > span.toggle,
-#content ul.container li.expanded:hover > span.toggle {
+#content ul.container li.expanded:hover > span.toggle,
+body.modkey #content ul.container li.expanded > span.toggle {
     background: url('expanded.png') no-repeat scroll 0px 5px transparent;
 }
 
@@ -164,7 +166,8 @@ h1 a {
     visibility: hidden;
 }
 
-#content ul.container li.branch:hover > span.archive {
+#content ul.container li.branch:hover > span.archive,
+body.modkey #content ul.container li.branch span.archive {
     visibility: visible;
 }
 
