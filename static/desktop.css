@@ -4,7 +4,7 @@ body {
     margin: 0;
 }
 
-body, input {
+body, textarea {
     color: #666;
     font-family: "PT Sans", Calibri, Verdana, "lucida console", sans-serif;
     font-size: 14px;
@@ -179,21 +179,19 @@ body.modkey #content ul.container li.branch span.archive {
     padding: 3px 0 0 22px;
 }
 
-#content ul.container li.add input {
+#content ul.container li.add span {
+    display: inline-block;
     font-style: italic;
-    padding: 2px;
-    padding-left: 20px;
-    border: none;
-    border-bottom: 1px solid transparent;
-    width: 90%;
-    background: url('plus.png') no-repeat scroll 2px 2px transparent;
+    padding: 4px 2px 2px 2px;
+    padding-left: 23px;
+    background: url('plus.png') no-repeat scroll 2px center transparent;
+    height: 18px;
 }
 
-#content ul.container li.add input.hasinput {
-    font-style: normal;
+#content ul.container li.add textarea {
+    border: none;
     border-bottom: 1px solid #ccc;
-    background: none;
-    padding-left: 2px;
+    padding: 2px;
 }
 
 a.external {

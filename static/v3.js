@@ -218,25 +218,23 @@ iron.render_branches = function(parentid, data) {
     var addform = $('> li.add', container);
 
     if (!addform.length) {
-        var addform = $('<li class="add"><input type="text" value="Add new" /></li>');
+        var addform = $('<li class="add"><span>Add new</span><textarea style="display: none;" rows="1" cols="40"></textarea></li>');
         container.append(addform);
 
-        $('input', addform).focus(function() {
-            $(this).addClass('hasinput');
+        $('textarea', addform).autoGrow();
 
-            if ($(this).val() == 'Add new') {
-                $(this).val('');
-            }
+        $('span', addform).click(function() {
+            $('textarea', addform).show();
+            $('textarea', addform).focus();
+            $(this).hide();
         });
 
-        $('input', addform).blur(function() {
-            if ($(this).val() == '') {
-                $(this).removeClass('hasinput');
-                $(this).val('Add new');
-            }
+        $('textarea', addform).blur(function() {
+            $('span', addform).show();
+            $(this).hide();
         });
 
-        $('input', addform).keyup(function(event) {
+        $('textarea', addform).keyup(function(event) {
             if (event.keyCode == 13) {
                 iron.logger('Save new branch with content "'+$(this).val()+'"');
 
@@ -256,6 +254,9 @@ iron.render_branches = function(parentid, data) {
 
                 // Reset add form ready for new item
                 $(this).val('');
+            }
+            else if (event.keyCode == 27) {
+                $(this).blur();
             }
         });
     }
