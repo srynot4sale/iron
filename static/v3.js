@@ -221,8 +221,6 @@ iron.render_branches = function(parentid, data) {
         var addform = $('<li class="add"><span>Add new</span><textarea style="display: none;" rows="1" cols="40"></textarea></li>');
         container.append(addform);
 
-        $('textarea', addform).autoGrow();
-
         $('span', addform).click(function() {
             $('textarea', addform).show();
             $('textarea', addform).focus();
@@ -234,7 +232,8 @@ iron.render_branches = function(parentid, data) {
             $(this).hide();
         });
 
-        $('textarea', addform).keyup(function(event) {
+        $('textarea', addform).keydown(function(event) {
+            // Handle enter
             if (event.keyCode == 13) {
                 iron.logger('Save new branch with content "'+$(this).val()+'"');
 
@@ -255,6 +254,7 @@ iron.render_branches = function(parentid, data) {
                 // Reset add form ready for new item
                 $(this).val('');
             }
+            // Handle ESC
             else if (event.keyCode == 27) {
                 $(this).blur();
             }
@@ -307,7 +307,7 @@ iron.render_branch = function(container, data) {
 
         var branchcontent = $('<span class="content"></span>');
         var branchtoggle = $('<span class="toggle"></span>');
-        var branchactions = $('<span class="archive">a</span>');
+        var branchactions = $('<span class="actions"><span class="edit">e</span><span class="archive">a</span></span>');
         branch.append(branchtoggle);
         branch.append(branchcontent);
         branch.append(branchactions);
@@ -337,7 +337,7 @@ iron.render_branch = function(container, data) {
 iron.update_branch = function(branch, data) {
 
     var content = $('> span.content', branch);
-    var actions = $('> span.archive', branch);
+    var actions = $('> span.actions span.archive', branch);
 
     // Update branch content
     if (data.text) {
@@ -385,6 +385,60 @@ iron.attach_branch_triggers = function(branch) {
         // Check the branch is not being dragged
         var container = branch.parent('ul.container');
         iron.toggle_branch(branchid);
+    });
+
+    // Create "edit" click event
+    $('span.actions span.edit', branch).click(function() {
+
+        var content = $('> span.content', branch);
+        var text = $('span.text', content);
+        var actions = $('> span.actions', branch);
+
+        // Check for existing textarea
+        var editform = $('> textarea', content);
+        if (!editform.length) {
+            var editform = $('<textarea rows="1" cols="40"></textarea>');
+            editform.val(text.html());
+            text.after(editform);
+        }
+
+        // Show textarea, hide text
+        editform.show();
+        text.hide();
+        actions.hide();
+        editform.focus();
+
+        // Hide (but not reset) on blur
+        editform.blur(function() {
+            $(this).hide();
+            text.show();
+            actions.show();
+        });
+
+        editform.keydown(function(event) {
+            // Handle enter
+            if (event.keyCode == 13) {
+                iron.logger('Edit branch "'+branchid+'" with content "'+$(this).val()+'"');
+
+                // Update text to read "saving"
+                text.html($(this).val()+' <i>(updating...)</i>');
+
+                // Send update
+                iron.edit_branch(branch.attr('parent-id'), branchid, $(this).val());
+
+                // Delete textarea, clearing content
+                $(this).remove();
+                text.show();
+                actions.show();
+            }
+            // Handle ESC
+            else if (event.keyCode == 27) {
+                // Delete textarea, clearing content
+                $(this).remove();
+                text.show();
+                actions.show();
+            }
+        });
     });
 
     // Create "archive" click event on branch archive
@@ -468,6 +522,33 @@ iron.save_branch = function(parentid, content) {
     );
 }
 
+/**
+ * Edit branch
+ *
+ * @param   integer parentid
+ * @param   integer branchid
+ * @param   string  content
+ */
+iron.edit_branch = function(parentid, branchid, content) {
+
+    // Add loading icon to all new branches waiting for response
+    var branch = $('li[branch-id="'+branchid+'"]');
+    branch.addClass('loading-progress');
+
+    // Success callback (removes loading icon)
+    var save_branch_success = function() {
+        branch.removeClass('loading-progress');
+        iron.load_branch(parentid);
+    };
+
+    // Edot branch
+    iron.api.post(
+        'Edit branch '+branchid,
+        '/edit/'+branchid,
+        { text: content },
+        save_branch_success
+    );
+}
 
 /**
  * Update branch sort order

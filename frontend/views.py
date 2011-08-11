@@ -95,6 +95,17 @@ def archive_item(request, itemid):
     return HttpResponse('')
 
 
+def edit_item(request, itemid):
+
+    items.setowner(request.user.id)
+
+    item = items.item()
+    item.load(itemid)
+    item.update_text(request.POST['text'])
+
+    return HttpResponse('')
+
+
 def move_item(request, itemid):
 
     items.setowner(request.user.id)

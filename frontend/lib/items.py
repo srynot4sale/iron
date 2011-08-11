@@ -147,6 +147,32 @@ class item(object):
         c.close()
 
 
+    # Update text
+    def update_text(self, text):
+        self.text = text
+
+        c = conn.cursor()
+        c.execute(
+            """
+                UPDATE
+                    `data`
+                SET
+                    `text` = %s
+                WHERE
+                    `id` = %s
+                AND `ownerid` = %s
+            """,
+            (
+                text,
+                self.id,
+                OWNER_ID
+            )
+        )
+
+        conn.commit()
+        c.close()
+
+
     # Move this item
     def move(self, moveto):
         c = conn.cursor()

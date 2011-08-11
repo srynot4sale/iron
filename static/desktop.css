@@ -109,7 +109,7 @@ h1 a {
     padding-right: 25px;
 }
 
-#content ul.container li.loading-progress > span.archive {
+#content ul.container li.loading-progress > span.actions {
     visibility: hidden;
 }
 
@@ -154,21 +154,46 @@ body.modkey #content ul.container li.expanded > span.toggle {
     color: #333;
 }
 
+#content ul.container li.branch span.actions {
+    display: inline-block;
+    margin: 0 0 0 10px;
+    visibility: hidden;
+}
+
+#content ul.container li.branch span.edit {
+    display: inline-block;
+    color: #F16C32;
+    padding: 0 5px;
+    margin: 0 10px 0 0;
+    cursor: pointer;
+    background: url('edit.png') no-repeat scroll center center transparent;
+    text-indent: -9999px;
+    overflow: hidden;
+}
+
 #content ul.container li.branch span.archive {
     display: inline-block;
     color: #F16C32;
     padding: 0 5px;
-    margin: 0 2px 0 10px;
+    margin: 0 10px 0 0;
     cursor: pointer;
     background: url('archive.png') no-repeat scroll center center transparent;
     text-indent: -9999px;
     overflow: hidden;
-    visibility: hidden;
 }
 
-#content ul.container li.branch:hover > span.archive,
-body.modkey #content ul.container li.branch span.archive {
+#content ul.container li.branch:hover > span.actions,
+body.modkey #content ul.container li.branch span.actions {
     visibility: visible;
+}
+
+#content ul.container li.branch > span.content > textarea {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin: -5px 0 -5px -2px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 #content ul.container li.add {
