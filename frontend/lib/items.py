@@ -157,13 +157,15 @@ class item(object):
                 UPDATE
                     `data`
                 SET
-                    `text` = %s
+                    `text` = %s,
+                    `updated` = FROM_UNIXTIME(%s)
                 WHERE
                     `id` = %s
                 AND `ownerid` = %s
             """,
             (
                 text,
+                int(time.time()),
                 self.id,
                 OWNER_ID
             )
