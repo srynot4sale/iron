@@ -156,7 +156,8 @@ body.modkey #content ul.container li.expanded > span.toggle {
 
 #content ul.container li.branch span.actions {
     display: inline-block;
-    margin: 0 0 0 10px;
+    margin: 0;
+    padding: 0 0 0 10px;
     visibility: hidden;
 }
 
@@ -182,7 +183,8 @@ body.modkey #content ul.container li.expanded > span.toggle {
     overflow: hidden;
 }
 
-#content ul.container li.branch:hover > span.actions,
+#content ul.container li.branch span.content:hover~span.actions,
+#content ul.container li.branch span.actions:hover,
 body.modkey #content ul.container li.branch span.actions {
     visibility: visible;
 }
