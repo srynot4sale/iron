@@ -191,12 +191,12 @@ iron.render_branches = function(parentid, data) {
         if (localbranches.length - l) {
             lbranch = $(localbranches[l]);
             l += 1;
-        } else {
-            lbranch = undefined;
-        }
 
-        // Check if branch has been editing and needs refreshing
-        if (lbranch.data('needsrefresh')) {
+            // Check if branch has been editing and needs refreshing
+            if (lbranch.data('needsrefresh')) {
+                lbranch = undefined;
+            }
+        } else {
             lbranch = undefined;
         }
 
