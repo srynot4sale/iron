@@ -190,6 +190,7 @@ body.modkey #content ul.container li.branch span.actions {
 }
 
 #content ul.container li.branch > span.content > textarea {
+    width: 90%;
     border: none;
     border-bottom: 1px solid #ccc;
     padding: 2px;
@@ -216,6 +217,7 @@ body.modkey #content ul.container li.branch span.actions {
 }
 
 #content ul.container li.add textarea {
+    width: 90%;
     border: none;
     border-bottom: 1px solid #ccc;
     padding: 2px;
