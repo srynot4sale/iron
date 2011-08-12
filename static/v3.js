@@ -195,6 +195,11 @@ iron.render_branches = function(parentid, data) {
             lbranch = undefined;
         }
 
+        // Check if branch has been editing and needs refreshing
+        if (lbranch.data('needsrefresh')) {
+            lbranch = undefined;
+        }
+
         // Compare
         if (lbranch != undefined && rbranch != undefined &&
             lbranch.data('branchid') == rbranch.id) {
@@ -430,6 +435,9 @@ iron.attach_branch_triggers = function(branch) {
 
                 // Update text to read "saving"
                 text.html($(this).val()+' <i>(updating...)</i>');
+
+                // Set needsrefresh
+                branch.data('needsrefresh', 1);
 
                 // Send update
                 iron.edit_branch(branch.data('parentid'), branchid, $(this).val());
