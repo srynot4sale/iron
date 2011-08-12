@@ -225,7 +225,8 @@ class item(object):
                     `created`,
                     `updated`,
                     `parentid`,
-                    `ownerid`
+                    `ownerid`,
+                    `sort`
                 )
                 VALUES
                 (
@@ -233,7 +234,8 @@ class item(object):
                     FROM_UNIXTIME(%s),
                     FROM_UNIXTIME(%s),
                     %s,
-                    %s
+                    %s,
+                    0
                 )
             """,
             (
