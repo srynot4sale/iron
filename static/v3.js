@@ -672,18 +672,6 @@ $(function() {
         $('body').addClass('smartphone');
     }
 
-    // Catch modkey event
-    $(document).keydown(function(event) {
-        if (event.keyCode == '17') {
-            $('body').addClass('modkey');
-        }
-    });
-    $(document).keyup(function(event) {
-        if (event.keyCode == '17') {
-            $('body').removeClass('modkey');
-        }
-    });
-
     // Display logging toggle button
     iron.logging_toggle();
 
