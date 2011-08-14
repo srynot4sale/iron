@@ -147,6 +147,63 @@ class item(object):
         c.close()
 
 
+    # Reparent this item
+    def reparent(self, newparent):
+        oldparent = self.parentid
+        self.parentid = newparent
+
+        c = conn.cursor()
+        c.execute(
+            """
+                UPDATE
+                    `data`
+                SET
+                    `parentid` = %s
+                WHERE
+                    `id` = %s
+                AND `ownerid` = %s
+            """,
+            (
+                newparent,
+                self.id,
+                OWNER_ID
+            )
+        )
+
+        newsort = self.get_max_sort()
+
+        # Update the id
+        c.execute(
+            """
+                UPDATE
+                    `data`
+                SET
+                    `sort` = %s
+                WHERE
+                    `uid` = %s
+                AND `ownerid` = %s
+            """,
+            (
+                newsort,
+                self.uid,
+                OWNER_ID
+            )
+        )
+
+        conn.commit()
+        c.close()
+
+        # Resort old parent
+        p = item()
+        p.id = oldparent
+        p.sort_children()
+
+        # Resort new parent
+        p = item()
+        p.id = self.parentid
+        p.sort_children()
+
+
     # Update text
     def update_text(self, text):
         self.text = text
@@ -249,26 +306,9 @@ class item(object):
 
         self.uid = c.lastrowid
         self.id = self.uid
+        self.parentid = parent
 
-        # Get max sort for previous items
-        c.execute(
-            """
-                SELECT
-                    MAX(`sort`) + 1 AS `sort`
-                FROM
-                    `data`
-                WHERE
-                    `parentid` = %s
-                AND `ownerid` = %s
-            """,
-            (
-                parent,
-                OWNER_ID
-            )
-        )
-        result = c.fetchone()
-        newsort = result['sort']
-
+        newsort = self.get_max_sort()
 
         # Update the id
         c.execute(
@@ -297,6 +337,33 @@ class item(object):
         p = item()
         p.id = parent
         p.sort_children()
+
+
+    # Get max sort for previous items
+    def get_max_sort(self):
+        c = conn.cursor()
+        c.execute(
+            """
+                SELECT
+                    MAX(`sort`) + 1 AS `sort`
+                FROM
+                    `data`
+                WHERE
+                    `parentid` = %s
+                AND `ownerid` = %s
+            """,
+            (
+                self.parentid,
+                OWNER_ID
+            )
+        )
+        result = c.fetchone()
+
+        conn.commit()
+        c.close()
+
+        return result['sort']
+
 
 
 def loadNewest():

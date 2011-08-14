@@ -23,6 +23,9 @@ urlpatterns = patterns('',
     # Move item
     url(r'^move/(\d+)$', 'frontend.views.move_item'),
 
+    # Reparent item
+    url(r'^reparent/(\d+)$', 'frontend.views.reparent_item'),
+
     # Edit item
     url(r'^edit/(\d+)$', 'frontend.views.edit_item'),
 

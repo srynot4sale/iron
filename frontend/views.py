@@ -131,3 +131,15 @@ def search_items(request, searchterms):
     json = items.searchjson(searchterms)
 
     return HttpResponse(json)
+
+
+def reparent_item(request, itemid):
+
+    items.setowner(request.user.id)
+
+    item = items.item()
+    item.load(itemid)
+    item.reparent(request.POST['parentid'])
+
+    return HttpResponse('')
+

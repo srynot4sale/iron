@@ -179,6 +179,15 @@ h1 a {
     overflow: hidden;
 }
 
+#content ul.container li.branch span.move {
+    display: inline-block;
+    color: #F16C32;
+    padding: 0 5px;
+    margin: 0 10px 0 0;
+    cursor: move;
+    overflow: hidden;
+}
+
 #content ul.container li.branch span.archive {
     display: inline-block;
     color: #F16C32;

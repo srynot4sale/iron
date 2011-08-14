@@ -315,7 +315,7 @@ iron.render_branch = function(container, data) {
 
         var branchcontent = $('<span class="content"></span>');
         var branchtoggle = $('<span class="toggle"></span>');
-        var branchactions = $('<span class="actions"><span class="edit">e</span><span class="archive">a</span></span>');
+        var branchactions = $('<span class="actions"><span class="edit">e</span><span class="move">m</span><span class="archive">a</span></span>');
         branch.append(branchtoggle);
         branch.append(branchcontent);
         branch.append(branchactions);
@@ -389,15 +389,30 @@ iron.attach_branch_triggers = function(branch) {
     // Branch ID
     var branchid = branch.data('branchid');
 
+    // Make branch draggable
+    branch.draggable({
+        revert:     true,
+        handle:     'span.move'
+    });
+
+    // Make branch droppable
+    branch.droppable({
+        greedy: true,
+        drop: function(event, ui) {
+            // Reparent
+            iron.reparent_branch(ui.draggable.data('branchid'), ui.draggable.data('parentid'), branchid);
+        }
+    });
+
     // Create "toggle" click event
-    $('span.toggle', branch).click(function() {
+    $('> span.toggle', branch).click(function() {
         // Check the branch is not being dragged
         var container = branch.parent('ul.container');
         iron.toggle_branch(branchid);
     });
 
     // Create "edit" click event
-    $('span.actions span.edit', branch).click(function() {
+    $('> span.actions span.edit', branch).click(function() {
 
         var content = $('> span.content', branch);
         var text = $('span.text', content);
@@ -458,7 +473,7 @@ iron.attach_branch_triggers = function(branch) {
     });
 
     // Create "archive" click event on branch archive
-    $('span.archive', branch).click(function() {
+    $('> span.actions span.archive', branch).click(function() {
 
         // Add loading icon to branch and "archiving" message
         $('> span.content span.text', branch).append(' <i>(archiving...)</i>');
@@ -537,6 +552,42 @@ iron.save_branch = function(parentid, content) {
         save_branch_success
     );
 }
+
+
+/**
+ * Reparent branch
+ *
+ * @param   integer branchid
+ * @param   integer oldparentid
+ * @param   integer newparentid
+ * @param   string  content
+ */
+iron.reparent_branch = function(branchid, oldparentid, newparentid) {
+
+    // Add loading icon to branch
+    var branch = $('li#b-'+branchid);
+    branch.addClass('loading-progress');
+
+    iron.logger('Branch: '+branchid);
+    iron.logger('Old parent: '+oldparentid);
+    iron.logger('New parent: '+newparentid);
+
+    // Success callback (removes loading icon)
+    var reparent_branch_success = function() {
+        branch.remove();
+        iron.load_branch(newparentid);
+        iron.load_branch(oldparentid);
+    };
+
+    // Reparent then update branch
+    iron.api.post(
+        'Reparent branch '+branchid,
+        '/reparent/'+branchid,
+        { parentid: newparentid },
+        reparent_branch_success
+    );
+}
+
 
 /**
  * Edit branch
