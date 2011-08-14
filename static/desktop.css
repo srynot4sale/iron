@@ -101,7 +101,7 @@ h1 a {
 #content ul.container li {
     list-style-type: none;
     margin: 0;
-    padding: 0 20px 5px 0;
+    padding: 0 0 5px 0;
 }
 
 #content ul.container li.loading-progress > span.content {
