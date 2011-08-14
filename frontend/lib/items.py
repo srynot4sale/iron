@@ -393,3 +393,51 @@ def createjson(parent):
 
     # Return as json formatted string
     return json.dumps(data)
+
+
+def searchjson(searchterms):
+
+    searchterms = '%'+searchterms+'%'
+
+    c = conn.cursor()
+    c.execute(
+        """
+            SELECT
+                `data`.`uid`,
+                `data`.`id`,
+                `data`.`text`,
+                `data`.`created`,
+                `data`.`updated`,
+                `data`.`sort`,
+                `data`.`parentid`
+            FROM
+                `data`
+            WHERE
+                `data`.`archive` = 0
+            AND `data`.`text` LIKE %s
+            AND `data`.`ownerid` = %s
+            ORDER BY
+                `sort` ASC,
+                `updated` DESC
+        """,
+        (
+            searchterms,
+            OWNER_ID
+        )
+    )
+
+    data = []
+
+    for item in c:
+        dc = {}
+        dc['id'] = item['id']
+        dc['text'] = item['text']
+        dc['children_count'] = 0
+        dc['parent_id'] = item['parentid']
+
+        data.append(dc)
+
+
+    # Return as json formatted string
+    return json.dumps(data)
+

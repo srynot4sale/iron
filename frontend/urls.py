@@ -26,6 +26,9 @@ urlpatterns = patterns('',
     # Edit item
     url(r'^edit/(\d+)$', 'frontend.views.edit_item'),
 
+    # Search items
+    url(r'^search/(.+)$', 'frontend.views.search_items'),
+
     # url(r'^frontend/', include('frontend.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -122,3 +122,12 @@ def move_item(request, itemid):
     item.move(moveto)
 
     return HttpResponse('')
+
+
+def search_items(request, searchterms):
+
+    items.setowner(request.user.id)
+
+    json = items.searchjson(searchterms)
+
+    return HttpResponse(json)
