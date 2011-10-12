@@ -315,7 +315,7 @@ iron.render_branch = function(container, data) {
 
         var branchcontent = $('<span class="content"></span>');
         var branchtoggle = $('<span class="toggle"></span>');
-        var branchactions = $('<span class="actions"><span class="edit">e</span><span class="move">m</span><span class="archive">a</span></span>');
+        var branchactions = $('<span class="actions"><span class="edit">e</span><span class="archive">a</span></span>');
         branch.append(branchtoggle);
         branch.append(branchcontent);
         branch.append(branchactions);
@@ -390,7 +390,7 @@ iron.attach_branch_triggers = function(branch) {
     var branchid = branch.data('branchid');
 
     // Make branch draggable
-    branch.draggable({
+/*    branch.draggable({
         revert:     true,
         handle:     'span.move'
     });
@@ -403,7 +403,7 @@ iron.attach_branch_triggers = function(branch) {
             iron.reparent_branch(ui.draggable.data('branchid'), ui.draggable.data('parentid'), branchid);
         }
     });
-
+*/
     // Create "toggle" click event
     $('> span.toggle', branch).click(function() {
         // Check the branch is not being dragged
