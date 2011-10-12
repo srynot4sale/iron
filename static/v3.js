@@ -662,6 +662,11 @@ iron.load_branch = function(branchid) {
         iron.render_branches(branchid, data);
     };
 
+    // Try catch undefined bug I've been seeing
+    if (branchid == undefined) {
+        alert('Branch ID undefined (in iron.load_branch)');
+    }
+
     iron.api.getJSON(
         'Load branch '+branchid,
         '/json/'+branchid,
