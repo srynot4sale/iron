@@ -350,7 +350,7 @@ iron.update_branch = function(branch, data) {
     // Update branch content
     if (data.text) {
         // Surround all links with correct html
-        var html = data.text.replace(/(https?:\/\/[^ ]+)/g, "<a href=\"$1\">$1</a>");
+        var html = data.text.replace(/(https?:\/\/[^ ]+)/g, "<a href=\"$1\" target=\"_blank\">$1</a>");
     }
 
     var text = '<span class="text">'+html+'</span>';
