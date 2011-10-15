@@ -149,7 +149,8 @@ iron.render_branches = function(parentid, data) {
                 items: '> li.branch',
                 handle: '> span.content',
                 axis: 'y',
-                delay: 500
+                delay: 500,
+                cursor: 'crosshair'
             }
         );
 
@@ -314,11 +315,13 @@ iron.render_branch = function(container, data) {
         });
 
         var branchcontent = $('<span class="content"></span>');
+        var branchmeta = $('<span class="meta"></span>');
         var branchtoggle = $('<span class="toggle"></span>');
         var branchactions = $('<span class="actions"><span class="edit">e</span><span class="archive">a</span></span>');
-        branch.append(branchtoggle);
+        branchmeta.append(branchtoggle);
+        branchmeta.append(branchactions);
+        branch.append(branchmeta);
         branch.append(branchcontent);
-        branch.append(branchactions);
 
         if ($('> li.add', container).length) {
             $('> li.add', container).before(branch);
@@ -405,14 +408,14 @@ iron.attach_branch_triggers = function(branch) {
     });
 */
     // Create "toggle" click event
-    $('> span.toggle', branch).click(function() {
+    $('> span.meta span.toggle', branch).click(function() {
         // Check the branch is not being dragged
         var container = branch.parent('ul.container');
         iron.toggle_branch(branchid);
     });
 
     // Create "edit" click event
-    $('> span.actions span.edit', branch).click(function() {
+    $('> span.meta span.actions span.edit', branch).click(function() {
 
         var content = $('> span.content', branch);
         var text = $('span.text', content);
@@ -473,7 +476,7 @@ iron.attach_branch_triggers = function(branch) {
     });
 
     // Create "archive" click event on branch archive
-    $('> span.actions span.archive', branch).click(function() {
+    $('> span.meta span.actions span.archive', branch).click(function() {
 
         // Add loading icon to branch and "archiving" message
         $('> span.content span.text', branch).append(' <i>(archiving...)</i>');

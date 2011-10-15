@@ -95,6 +95,10 @@ h1 a {
     display: none;
 }
 
+
+/**
+ * List styling
+ */
 #content {
     clear: left;
     margin: 0;
@@ -138,13 +142,13 @@ h1 a {
     display: inline-block;
 }
 
-#content ul.container li.has-children > span.toggle,
-#content ul.container li.branch:hover > span.toggle {
+#content ul.container li.has-children > span.meta span.toggle,
+#content ul.container li.branch:hover > span.meta span.toggle {
     background: url('collapsed.png') no-repeat scroll 0px 5px transparent;
 }
 
-#content ul.container li.expanded > span.toggle,
-#content ul.container li.expanded:hover > span.toggle {
+#content ul.container li.expanded > span.meta span.toggle,
+#content ul.container li.expanded:hover > span.meta span.toggle {
     background: url('expanded.png') no-repeat scroll 0px 5px transparent;
 }
 
@@ -162,17 +166,26 @@ h1 a {
 }
 
 #content ul.container li.branch span.actions {
-    display: inline-block;
+    display: none;
     margin: 0;
     padding: 0 0 0 10px;
-    visibility: hidden;
+}
+
+#content ul.container li.branch span.meta:hover span.actions,
+#content ul.container li.branch span.meta span.action:hover {
+    position: absolute;
+    display: block;
+    background-color: #fff;
+    margin-top: -25px;
+    margin-left: -22px;
+    padding: 2px 8px 2px 5px;
 }
 
 #content ul.container li.branch span.edit {
-    display: inline-block;
+    display: block;
     color: #F16C32;
     padding: 0 5px;
-    margin: 0 10px 0 0;
+    margin: 1.5px 0 3px;
     cursor: pointer;
     background: url('edit.png') no-repeat scroll center center transparent;
     text-indent: -9999px;
@@ -180,19 +193,19 @@ h1 a {
 }
 
 #content ul.container li.branch span.move {
-    display: inline-block;
+    display: block;
     color: #F16C32;
     padding: 0 5px;
-    margin: 0 10px 0 0;
+    margin: 0 0 3px;
     cursor: move;
     overflow: hidden;
 }
 
 #content ul.container li.branch span.archive {
-    display: inline-block;
+    display: block;
     color: #F16C32;
     padding: 0 5px;
-    margin: 0 10px 0 0;
+    margin: 0 0 3px;
     cursor: pointer;
     background: url('archive.png') no-repeat scroll center center transparent;
     text-indent: -9999px;
