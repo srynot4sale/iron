@@ -314,7 +314,7 @@ iron.render_branch = function(container, data) {
             childcount: data.children_count
         });
 
-        var branchcontent = $('<span class="content"></span>');
+        var branchcontent = $('<span class="content" title="Branch ID: '+branchid+'"></span>');
         var branchmeta = $('<span class="meta"></span>');
         var branchtoggle = $('<span class="toggle"></span>');
         var branchactions = $('<span class="actions"><span class="edit">e</span><span class="archive">a</span></span>');
