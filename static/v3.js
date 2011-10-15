@@ -485,9 +485,6 @@ iron.attach_branch_triggers = function(branch) {
         // Success callback (removes branch)
         var archive_branch_success = function() {
             branch.remove();
-
-            // Reload branch
-            iron.load_branch(branch.data('parentid'));
         };
 
         // Save then update branch
