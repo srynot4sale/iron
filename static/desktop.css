@@ -106,8 +106,8 @@ h1 a {
 }
 
 #content ul.container {
-    margin: 5px 0;
-    padding: 0;
+    margin: 0 0 5px;
+    padding: 5px 0 0;
     list-style-type: none;
 }
 
@@ -228,20 +228,20 @@ h1 a {
 }
 
 #content ul.container li.add {
-    padding: 3px 0 0 12px;
+    padding: 0 0 2px 10px;
 }
 
 #content ul.container li ul.container li.add {
-    padding: 3px 0 0 22px;
+    padding: 0 0 2px 22px;
 }
 
 #content ul.container li.add span {
     display: inline-block;
     font-style: italic;
-    padding: 4px 2px 2px 2px;
+    padding: 2px 2px 0;
     padding-left: 23px;
     background: url('plus.png') no-repeat scroll 2px center transparent;
-    height: 18px;
+    height: 15px;
 }
 
 #content ul.container li.add textarea {
