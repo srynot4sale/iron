@@ -436,12 +436,12 @@ iron.attach_branch_triggers = function(branch) {
         editform.focus();
 
         // Hide (but not reset) on blur
-        editform.blur(function() {
+/*        editform.blur(function() {
             $(this).hide();
             text.show();
             actions.show();
         });
-
+*/
         editform.keydown(function(event) {
 
             // Handle enter
