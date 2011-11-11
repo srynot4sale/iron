@@ -233,11 +233,11 @@ iron.render_branches = function(parentid, data) {
             $(this).hide();
         });
 
-        $('textarea', addform).blur(function() {
+/*        $('textarea', addform).blur(function() {
             $('span', addform).show();
             $(this).hide();
         });
-
+*/
         $('textarea', addform).keydown(function(event) {
             // Handle enter
             if (event.keyCode == 13) {
@@ -265,7 +265,8 @@ iron.render_branches = function(parentid, data) {
             }
             // Handle ESC
             else if (event.keyCode == 27) {
-                $(this).blur();
+                $('span', addform).show();
+                $(this).hide();
             }
         });
     }
